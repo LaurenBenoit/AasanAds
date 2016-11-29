@@ -50,11 +50,42 @@ class Ad(models.Model):
 	phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 	phone_number = models.CharField(validators=[phone_regex], max_length=20) # validators should be a list
 	status = models.IntegerField(choices=AD_STATUS, default=0)
-	location = models.IntegerField(choices=LOCATION, default=0)
 	address = models.TextField()
 	link_url = models.TextField()
 	link_descriptor = models.TextField(default='click here!')
 	contact_preference = models.IntegerField(choices=PREFERENCE, default=0)
+	submitted_time = models.DateTimeField(auto_now_add=True)
+	total_money_paid = models.IntegerField(default=0)
+	last_money_topup = models.IntegerField(default=0)
+	#In order to get all topups call Ad.Topup_set.all()
+	#In order to get all LocationCounter call Ad.LocationCounter_set.all()
+	#https://docs.djangoproject.com/en/1.10/topics/db/examples/many_to_one/
+	# see example r.article_set.all()
+
+class Topup(models.Model):
+	ad = models.ForeignKey(Ad)
+	time = models.DateTimeField(auto_now_add=True)
+	money_paid = models.IntegerField()
+	is_running = models.BooleanField(default=True)
+	expiry_time = models.DateTimeField()
 
 
+
+class LocationCounter(models.Model):
+	#https://docs.djangoproject.com/en/1.10/ref/models/options/#unique-together
+	class Meta:
+		unique_together = (('ad', 'location'),)
+	ad = models.ForeignKey(Ad)
+	location = models.IntegerField(choices=LOCATION, default=0)
+	clicks = models.IntegerField(default=0)
 # Create your models here.
+
+
+
+
+
+
+
+
+
+#TODO feature: EDIT description, title, etc.
