@@ -61,6 +61,9 @@ class Ad(models.Model):
 	#In order to get all LocationCounter call Ad.LocationCounter_set.all()
 	#https://docs.djangoproject.com/en/1.10/topics/db/examples/many_to_one/
 	# see example r.article_set.all()
+	def approve(self):
+		self.status = 1
+		self.save()
 
 class Topup(models.Model):
 	ad = models.ForeignKey(Ad)

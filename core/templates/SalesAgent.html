@@ -1,0 +1,14 @@
+
+<h3>
+Unapproved Ads
+</h3>
+{% for ad in unapproved_ads %}
+	{{ad.title}} {{ad.description}}  id:{{ad.id}}  
+	Locations: 
+	{%  for loc in ad.locationcounter_set.all %}
+		{{loc.get_location_display}},
+	{% endfor %} 
+	<a href="/ad/approve/{{ad.id}}"><button > Approve! </button> </a>
+	<a href="/ad/delete/{{ad.id}}"><button > Delete! </button> </a>
+	<br>
+{% endfor %}
