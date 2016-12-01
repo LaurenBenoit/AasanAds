@@ -1,4 +1,5 @@
 import core.views as coreviews
+import core.api as coreapi
 from django.conf.urls import url
 
 urlpatterns = [
@@ -6,6 +7,6 @@ urlpatterns = [
 	url(r'^dashboard/$', coreviews.SalesAgent.as_view(), name='sales_agent'),
 	url(r'^ad/create/$', coreviews.AdCreateView.as_view()),
 	url(r'^ad/delete/(?P<pk>\d+)$', coreviews.adDelete),
-	url(r'^ad/approve/(?P<pk>\d+)$', coreviews.adApprove)
-
+	url(r'^ad/approve/(?P<pk>\d+)$', coreviews.adApprove),
+	url(r'^api/ad/create/$', coreapi.createAd)
 ]

@@ -7,4 +7,4 @@ class AdCreateForm(forms.ModelForm):
 
 	class Meta:
 		model = coremodels.Ad
-		fields = ['title', 'description', 'phone_number', 'address', 'link_url', 'link_descriptor', 'contact_preference']
+		fields = ['title', 'description', 'phone_number', 'address', 'link_url', 'button_label', 'contact_preference']

@@ -12,13 +12,6 @@ def Hello(request, **kwargs):
 # Create your views here.
 
 
-def approve_ad(ad):
-	add_ad_to_approved
-	dafuq
-	pass
-	# add ad to redis.
-	# convert ad status to approved.
-
 def get_ad():
 	pass
 
@@ -28,6 +21,7 @@ def is_Agent(user):
 def adApprove(request, pk=None, *args, **kwargs):
 	if is_Agent(request.user):
 		Ad.objects.get(id=pk).approve()
+		# TODO: ADD ad to REDIS.
 	return redirect('sales_agent')
 
 def adDelete(request, pk=None, *args, **kwargs):
@@ -38,12 +32,12 @@ def adDelete(request, pk=None, *args, **kwargs):
 
 class SalesAgent(View):
 	def get(self, request, *args, **kwargs):
-		print request.user
 		if is_Agent(request.user):
 			unapproved_ads = Ad.objects.filter(status=0).all()
-			for ad in unapproved_ads:
-				pass
-			data = {'unapproved_ads':unapproved_ads}
+			approved_ads = Ad.objects.filter(status=1).all()
+			# for ad in uapproved_ads:
+			# 	pass
+			data = {'unapproved_ads':unapproved_ads,'approved_ads':approved_ads}
 			return render_to_response('SalesAgent.html', data)
 		elif request.user.is_authenticated():
 			return HttpResponse("u r not agent")
