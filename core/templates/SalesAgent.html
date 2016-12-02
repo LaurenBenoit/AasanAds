@@ -27,3 +27,20 @@ Unpaid/Approved Ads
 	<a href="/ad/delete/{{ad.id}}"><button > Delete! </button> </a>
 	<br>
 {% endfor %}
+
+<h3>
+Paused Ads
+</h3>
+
+{% for ad in paused_ads %}
+{{ad.title}} {{ad.description}}  id:{{ad.id}}  
+	Locations: 
+	{%  for loc in ad.locationcounter_set.all %}
+		{{loc.get_location_display}},
+	{% endfor %} 
+	<a href="/ad/delete/{{ad.id}}"><button > Delete! </button> </a>
+	<br>
+{% endfor %}
+
+
+<a href='logout'> Logout </a>

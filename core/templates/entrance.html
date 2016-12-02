@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load sitegate %}
+{% block content %}
+
+<section id="services">
+ <div class="my_signin_block">
+  <div class="header" align="center">
+                                <h4 class="title">Sign In</h4>
+                            </div>
+                            <div class="content">
+ {% sitegate_signin_form %}
+ </div>
+ </div>
+</section>
+<div class="footer" align="center">
+
+<h5>
+</h5>
+</div>
+{% endblock %}

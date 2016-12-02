@@ -4,14 +4,23 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+def get_SalesAgent(self):
+	try:
+		return self.salesagent
+	except:
+		return None
+User.add_to_class("get_SalesAgent",get_SalesAgent)
+
+
 AD_STATUS = (
-	(0, 'Unapproved'), # Not Running
-	(1, 'Approved/Unpaid'), # Running.
-	(2, 'Paused'), # Not Running
-	(3, 'Claimed'),
-	(3, 'Running'), # Running.
-	(4, 'Stopped'), # Not Running
-	(5, 'Expired')
+	(0, 'Unapproved'),		# Not Running
+	(1, 'Approved/Unpaid'),	# Running.
+	(2, 'Paused'),			# Not Running
+	(3, 'Claimed'),			# Not Running
+	(4, 'Closed'),			# Not Running
+	(5, 'Running'),			# Running.
+	(6, 'Stopped'),			# Not Running
+	(7, 'Expired')
 )
 
 LOCATION = (
@@ -40,21 +49,25 @@ LOCATION = (
 
 
 PREFERENCE = (
-	(0, 'Call/Text'), 
+	(0, 'Call/Text'),
 	(1, 'Call'),
 	(2, 'Text'),
 )
 
 PAISA_TYPES = (
-	(0, 'easyPaisa'), #Telenor
-	(1, 'timePey'), #Zong
-	(2, 'uPay'), #Ufone
-	(3, 'jazzCash'), #Jazz,mobilink
-	(4,'mobilePaisa') #Warid
+	(0, 'easyPaisa'),	#Telenor
+	(1, 'timePey'),		#Zong
+	(2, 'uPay'),		#Ufone
+	(3, 'jazzCash'),	#Jazz,mobilink
+	(4,'mobilePaisa')	#Warid
 )
 
+#Cool down time before SalesAgent can claim another ad
+COOLDOWN_TIME = 5*60
+
 class SalesAgent(models.Model):
-	user = models.OneToOneField(User, unique=True)
+	#https://docs.djangoproject.com/en/1.10/topics/db/examples/one_to_one/
+	user = models.OneToOneField(User, unique=True, primary_key=True)
 	user_rating = models.FloatField(default=0.0)
 	rating_count = models.IntegerField(default=0)
 	total_claimed = models.IntegerField(default=0)
@@ -62,7 +75,9 @@ class SalesAgent(models.Model):
 	money_made = models.IntegerField(default=0)
 	commission_owed = models.IntegerField(default=0)
 	commission_paid = models.IntegerField(default=0)
-	last_closing_time = models.DateTimeField()
+	last_closing_time = models.DateTimeField(blank=True, null=True)
+	# Sales Agent can claim one ad per COOLDOWN_TIME.
+	last_ad_claim_time = models.DateTimeField(blank=True, null=True)
 
 class Ad(models.Model):
 	title = models.TextField(null=True,blank=True)
@@ -81,7 +96,7 @@ class Ad(models.Model):
 	total_money_paid = models.IntegerField(default=0)
 	last_money_topup = models.IntegerField(default=0)
 
-	claimed_by = models.ForeignKey(SalesAgent, null=True)
+	claimed_by = models.ForeignKey(SalesAgent, null=True, blank=True)
 	#In order to get all topups call Ad.Topup_set.all()
 	#In order to get all LocationCounter call Ad.LocationCounter_set.all()
 	#https://docs.djangoproject.com/en/1.10/topics/db/examples/many_to_one/
@@ -92,14 +107,14 @@ class Ad(models.Model):
 
 class Topup(models.Model):
 	paisa_type =models.IntegerField(choices=PAISA_TYPES, default=0)
-	paisa_id = models.IntegerField(null=True)
+	paisa_id = models.IntegerField(null=True, blank=True)
 	ad = models.ForeignKey(Ad)
 	time = models.DateTimeField(auto_now_add=True)
 	money_paid = models.IntegerField()
 	is_running = models.BooleanField(default=True)
 	expiry_time = models.DateTimeField()
 
-	closed_by = models.ForeignKey(SalesAgent, null=True)
+	closed_by = models.ForeignKey(SalesAgent, null=True, blank=True)
 
 
 
