@@ -7,6 +7,7 @@ AD_STATUS = (
 	(0, 'Unapproved'), # Not Running
 	(1, 'Approved/Unpaid'), # Running.
 	(2, 'Paused'), # Not Running
+	(3, 'Claimed'),
 	(3, 'Running'), # Running.
 	(4, 'Stopped'), # Not Running
 	(5, 'Expired')
@@ -51,6 +52,15 @@ PAISA_TYPES = (
 	(4,'mobilePaisa') #Warid
 )
 
+class SalesAgent(models.Model):
+	user_rating = models.FloatField(default=0.0)
+	rating_count = models.IntegerField(default=0)
+	total_claimed = models.IntegerField(default=0)
+	total_closed = models.IntegerField(default=0)
+	money_made =models.IntegerField(default=0)
+	commission_owed = models.IntegerField(default=0)
+	commission_paid = models.IntegerField(default=0)
+	last_closing_time = models.DateTimeField()
 
 class Ad(models.Model):
 	title = models.TextField(null=True,blank=True)
@@ -69,8 +79,7 @@ class Ad(models.Model):
 	total_money_paid = models.IntegerField(default=0)
 	last_money_topup = models.IntegerField(default=0)
 
-	is_claimed = models.BooleanField(default=False)
-	claimed_by = models.ForeignKey(SalesAgent)
+	claimed_by = models.ForeignKey(SalesAgent, null=True)
 	#In order to get all topups call Ad.Topup_set.all()
 	#In order to get all LocationCounter call Ad.LocationCounter_set.all()
 	#https://docs.djangoproject.com/en/1.10/topics/db/examples/many_to_one/
@@ -81,14 +90,14 @@ class Ad(models.Model):
 
 class Topup(models.Model):
 	paisa_type =models.IntegerField(choices=PAISA_TYPES, default=0)
-	paisa_id = models.IntegerField()
+	paisa_id = models.IntegerField(null=True)
 	ad = models.ForeignKey(Ad)
 	time = models.DateTimeField(auto_now_add=True)
 	money_paid = models.IntegerField()
 	is_running = models.BooleanField(default=True)
 	expiry_time = models.DateTimeField()
 
-	closed_by = models.ForeignKey(SalesAgent)
+	closed_by = models.ForeignKey(SalesAgent, null=True)
 
 
 
@@ -101,13 +110,4 @@ class LocationCounter(models.Model):
 	clicks = models.IntegerField(default=0)
 
 
-class SalesAgent(model.Model):
-	user_rating = models.FloatField(default=0.0)
-	rating_count = models.IntegerField(default=0)
-	total_claimed = models.IntegerField(default=0)
-	total_closed = models.IntegerField(default=0)
-	money_made =models.IntegerField(default=0)
-	commission_owed = models.IntegerField(default=0)
-	commission_paid = models.IntegerField(default=0)
-	last_closing_time = models.DateTimeField()
 #TODO feature: EDIT description, title, etc.
