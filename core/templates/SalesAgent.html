@@ -28,6 +28,7 @@ Unpaid/Approved Ads
 	<br>
 {% endfor %}
 
+
 <h3>
 Paused Ads
 </h3>
@@ -38,9 +39,30 @@ Paused Ads
 	{%  for loc in ad.locationcounter_set.all %}
 		{{loc.get_location_display}},
 	{% endfor %} 
+	{% if can_claim %}
+		<a href="/ad/claim/{{ad.id}}"><button > Claim! </button> </a>
+	{% endif %}
+	<br>
+{% endfor %}
+{% if can_claim %}
+zx
+{% endif %}
+
+<h3>
+My Claimed Ads
+</h3>
+
+{% for ad in my_claimed_ads %}
+	{{ad.title}} {{ad.description}}  id:{{ad.id}}  
+	Locations: 
+	{%  for loc in ad.locationcounter_set.all %}
+		{{loc.get_location_display}},
+	{% endfor %} 
 	<a href="/ad/delete/{{ad.id}}"><button > Delete! </button> </a>
 	<br>
 {% endfor %}
+
+
 
 
 <a href='logout'> Logout </a>

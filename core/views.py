@@ -10,6 +10,9 @@ import core.forms as coreforms
 import django.contrib.auth
 from django.contrib.auth.models import User
 from sitegate.decorators import redirect_signedin, sitegate_view
+import datetime
+from django.utils import timezone
+
 def Hello(request, **kwargs):
 	return JsonResponse({'foo':'bar'})
 # Create your views here.
@@ -32,15 +35,38 @@ def adDelete(request, pk=None, *args, **kwargs):
 		Ad.objects.get(id=pk).delete()
 	return redirect('sales_agent')
 
+def adClaim(request, pk=None, *args, **kwargs):
+	agent = request.user.get_SalesAgent()
+	if agent is not None:
+		ad_claimed = Ad.objects.get(id=pk)
+		ad_claimed.claimed_by = agent
+		ad_claimed.status = 3
+		ad_claimed.save()
+		agent.last_ad_claim_time = datetime.datetime.now()
+		agent.save()
+	return redirect('sales_agent')
 
 class Dashboard(View):
 	def get(self, request, *args, **kwargs):
 		if request.user.get_SalesAgent() is not None:
 			unapproved_ads = Ad.objects.filter(status=0).all()
 			approved_ads = Ad.objects.filter(status=1).all()
+			paused_ads = Ad.objects.filter(status=2).all()
+			agent = request.user.get_SalesAgent()
+			my_claimed_ads = Ad.objects.filter(status=3, claimed_by=agent).all()
 			# for ad in uapproved_ads:
 			# 	pass
-			data = {'unapproved_ads':unapproved_ads,'approved_ads':approved_ads}
+			can_claim = False
+			if agent.last_ad_claim_time is None:
+				can_claim = True
+			else:
+				timediff = timezone.now()- agent.last_ad_claim_time
+				print timediff
+				if timediff.seconds > coremodels.COOLDOWN_TIME:
+					can_claim = True
+			data = {'unapproved_ads':unapproved_ads,'approved_ads':approved_ads,
+					'paused_ads':paused_ads, 'can_claim': can_claim, 
+					'my_claimed_ads':my_claimed_ads}
 			return render_to_response('SalesAgent.html', data)
 		elif request.user.is_superuser:
 			return redirect('super_user')

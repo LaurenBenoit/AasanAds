@@ -15,9 +15,9 @@ User.add_to_class("get_SalesAgent",get_SalesAgent)
 AD_STATUS = (
 	(0, 'Unapproved'),		# Not Running
 	(1, 'Approved/Unpaid'),	# Running.
-	(2, 'Paused'),			# Not Running
-	(3, 'Claimed'),			# Not Running
-	(4, 'Closed'),			# Not Running
+	(2, 'Paused'),			# Not Running - 
+	(3, 'Claimed'),			# Not Running - Claimed by some specific Agent.
+	(4, 'Closed'),			# Not Running - Awaiting Verification.
 	(5, 'Running'),			# Running.
 	(6, 'Stopped'),			# Not Running
 	(7, 'Expired')
