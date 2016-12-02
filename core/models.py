@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from django.core.validators import RegexValidator
 from django.db import models
+from django.contrib.auth.models import User
 
 
 AD_STATUS = (
@@ -53,11 +54,12 @@ PAISA_TYPES = (
 )
 
 class SalesAgent(models.Model):
+	user = models.OneToOneField(User, unique=True)
 	user_rating = models.FloatField(default=0.0)
 	rating_count = models.IntegerField(default=0)
 	total_claimed = models.IntegerField(default=0)
 	total_closed = models.IntegerField(default=0)
-	money_made =models.IntegerField(default=0)
+	money_made = models.IntegerField(default=0)
 	commission_owed = models.IntegerField(default=0)
 	commission_paid = models.IntegerField(default=0)
 	last_closing_time = models.DateTimeField()
