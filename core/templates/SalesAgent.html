@@ -57,7 +57,8 @@ My Claimed Ads
 	Locations: 
 	{%  for loc in ad.locationcounter_set.all %}
 		{{loc.get_location_display}},
-	{% endfor %} 
+	{% endfor %}
+	<a href="/ad/close/{{ad.id}}"><button > Close! </button> </a> 
 	<a href="/ad/delete/{{ad.id}}"><button > Delete! </button> </a>
 	<br>
 {% endfor %}

@@ -8,3 +8,11 @@ class AdCreateForm(forms.ModelForm):
 	class Meta:
 		model = coremodels.Ad
 		fields = ['title', 'description', 'phone_number', 'address', 'link_url', 'button_label', 'contact_preference']
+
+class AdCloseForm(forms.ModelForm):
+	location = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+											choices=LOCATION)	
+	class Meta:
+		fields = ['title', 'description', 'address', 'link_url', 'button_label', 'contact_preference']
+		model = coremodels.Ad
+	

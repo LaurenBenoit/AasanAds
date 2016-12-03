@@ -2,7 +2,7 @@ from django.shortcuts import render, render_to_response
 from django.shortcuts import redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.generic import View,TemplateView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from core.models import LocationCounter,Ad
 import redis_utils
 import core.models as coremodels
@@ -99,11 +99,28 @@ class Superuser(View):
 		data = {}
 		return render_to_response('admin.html', data)
 
+class AdCloseView(UpdateView):
+	form_class = coreforms.AdCloseForm
+
+	# fields = ['title', 'description', 'address', 'link_url', 'button_label', 'contact_preference']
+	model = coremodels.Ad
+	template_name = 'form.html'
+	def get_initial(self):
+		variables = super(AdCloseView, self).get_initial()
+		location_counters = self.object.locationcounter_set.all()
+		locs = []
+		for location_counter in location_counters:
+			locs.append(location_counter.location)
+
+		variables['location'] = locs
+		return variables
 
 
 class AdCreateView(CreateView):
 	form_class = coreforms.AdCreateForm
 	template_name = 'form.html'
+	# template_name = 'kunden/kunde_update.html'
+	success_url = '/'
 	def form_valid(self, form):
 		self.object = form.save() # create the AD
 		ad_locations = form.cleaned_data['location']

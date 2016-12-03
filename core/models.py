@@ -105,15 +105,22 @@ class Ad(models.Model):
 		self.status = 1
 		self.save()
 
+
+TOPUP_STATUS = (
+	(0, 'closed'),	#Telenor
+	(1, 'paid'),		#Zong
+	(2, 'expired')		#Ufone
+)
+
 class Topup(models.Model):
 	paisa_type =models.IntegerField(choices=PAISA_TYPES, default=0)
 	paisa_id = models.IntegerField(null=True, blank=True)
 	ad = models.ForeignKey(Ad)
 	time = models.DateTimeField(auto_now_add=True)
 	money_paid = models.IntegerField()
-	is_running = models.BooleanField(default=True)
+	status = models.IntegerField(choices=TOPUP_STATUS, default=0)
 	expiry_time = models.DateTimeField()
-
+	clicks = models.IntegerField(default=0) 
 	closed_by = models.ForeignKey(SalesAgent, null=True, blank=True)
 
 

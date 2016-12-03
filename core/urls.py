@@ -16,6 +16,7 @@ urlpatterns = [
 	url(r'^ad/delete/(?P<pk>\d+)$', coreviews.adDelete),
 	url(r'^ad/approve/(?P<pk>\d+)$', coreviews.adApprove),
 	url(r'^ad/claim/(?P<pk>\d+)$', coreviews.adClaim),
+	url(r'^ad/close/(?P<pk>\d+)$', coreviews.AdCloseView.as_view()),
 
 	url(r'^api/ad/create/$', coreapi.createAd)
 ]
