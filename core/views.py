@@ -114,7 +114,20 @@ class AdCloseView(UpdateView):
 
 		variables['location'] = locs
 		return variables
-
+	def form_valid(self, form):
+		# this ssaves the ad fields.
+		self.object = form.save()
+		# This saves the Location field. Copied from Ad Create view form_valid
+		ad_locations = form.cleaned_data['location']
+		for loc in ad_locations:
+			loc_object = LocationCounter(ad=self.object, location=loc) # create location counters.
+			# these are for tracking hits 
+			loc_object.save()
+		#Saving a TopUp
+		coremodels.TopUp(closed_by = self.request.user.get_SalesAgent(), ad = self.object,
+						clicks = form.cleaned_data['clicks_promised'], 
+						money_paid = form.cleaned_data['money_negotiated'])
+		# print self.object.locationcounter_set.all()
 
 class AdCreateView(CreateView):
 	form_class = coreforms.AdCreateForm
@@ -128,7 +141,7 @@ class AdCreateView(CreateView):
 			loc_object = LocationCounter(ad=self.object, location=loc) # create location counters.
 			# these are for tracking hits 
 			loc_object.save()
-		print self.object.locationcounter_set.all()
+		# print self.object.locationcounter_set.all()
 		return HttpResponse("saved!")
 
 		

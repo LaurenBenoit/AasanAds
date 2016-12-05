@@ -12,7 +12,8 @@ class AdCreateForm(forms.ModelForm):
 class AdCloseForm(forms.ModelForm):
 	location = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
 											choices=LOCATION)	
+	clicks_promised = forms.IntegerField()
+	money_negotiated = forms.IntegerField()
 	class Meta:
 		fields = ['title', 'description', 'address', 'link_url', 'button_label', 'contact_preference']
 		model = coremodels.Ad
-	
