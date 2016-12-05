@@ -105,6 +105,12 @@ class Ad(models.Model):
 		self.status = 1
 		self.save()
 
+	def getLocations(self):
+		locs = []
+		for counterObject in self.locationcounter_set.all():
+			locs.append(counterObject.location)
+		return locs
+
 
 TOPUP_STATUS = (
 	(0, 'closed'),	#Telenor
