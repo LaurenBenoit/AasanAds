@@ -1,33 +1,83 @@
+<html>
+<head>
+<style type="text/css">
+div {
+    margin: 0px;
+    padding: 0px;
+}
+h1 {
+    margin: 0px;
+    padding: 0px;
+}
 
-<h3>
-Unapproved Ads
-</h3>
+table {
+    margin: 0px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    padding: 0px;
+}
+th {
+    text-align: left;
+}
+</style>
+</head>
+<body>
+<h1>
+Unapproved Ads</h1>
+
+<table style="width:100%; ">
+  <tr>
+    <th>ID</th>
+    <th>Title</th> 
+    <th>Description</th>
+    <th>Location(s)</th>
+    <th>ZXX</th>
+  </tr>
+ 
 {% for ad in unapproved_ads %}
-	{{ad.title}} {{ad.description}}  id:{{ad.id}}  
-	Locations: 
+<tr>
+	<td>{{ad.id}}</td> <td> {{ad.title}}</td> <td>{{ad.description}}</td>  
+	<td>
 	{%  for loc in ad.locationcounter_set.all %}
-		{{loc.get_location_display}},
+		{{loc.get_location_display}}{% if not forloop.last %},{% endif %}
 	{% endfor %} 
-	<a href="/ad/approve/{{ad.id}}"><button > Approve! </button> </a>
-	<a href="/ad/delete/{{ad.id}}"><button > Delete! </button> </a>
-	<br>
+	</td>
+	<td>
+	<a href="/ad/approve/{{ad.id}}"><button style="background-color: #4CAF50;"> Approve </button> </a>
+	<a href="/ad/update/{{ad.id}}"><button > Edit </button> </a>
+	<a href="/ad/delete/{{ad.id}}"><button style="background-color: #f44336;"> Delete </button> </a>
+	</td>
+</tr>
 {% endfor %}
+</table>
 
 
 <h3>
 Unpaid/Approved Ads
 </h3>
 
+<table style="width:100%; ">
+  <tr>
+    <th>ID</th>
+    <th>Title</th> 
+    <th>Description</th>
+    <th>Location(s)</th>
+    <th>ZXX</th>
+  </tr>
+ 
 {% for ad in approved_ads %}
-	{{ad.title}} {{ad.description}}  id:{{ad.id}}  
-	Locations: 
+
+	<tr><td>{{ad.id}}</td><td> {{ad.title}}</td><td> {{ad.description}}</td>   
+	<td>
 	{%  for loc in ad.locationcounter_set.all %}
-		{{loc.get_location_display}},
+		{{loc.get_location_display}}{% if not forloop.last %},{% endif %}
 	{% endfor %} 
-	<a href="/ad/delete/{{ad.id}}"><button > Delete! </button> </a>
-	<br>
+	</td>
+	<td> <a href="/ad/delete/{{ad.id}}"><button > Delete! </button> </a> </td>
+	</tr>
 {% endfor %}
 
+</table>
 
 <h3>
 Paused Ads
@@ -44,9 +94,6 @@ Paused Ads
 	{% endif %}
 	<br>
 {% endfor %}
-{% if can_claim %}
-zx
-{% endif %}
 
 <h3>
 My Claimed Ads
@@ -67,3 +114,5 @@ My Claimed Ads
 
 
 <a href='logout'> Logout </a>
+</body>
+</html>

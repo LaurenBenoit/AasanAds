@@ -80,7 +80,6 @@ class Dashboard(View):
 
 class SalesAgentCreateView(CreateView):
 	form_class = coreforms.AgentCreateForm
-	model = User
 	template_name = 'form.html'
 	def get_context_data(self,**kwargs):
 		if self.request.user.is_superuser:
@@ -104,6 +103,33 @@ class Superuser(View):
 		data = {}
 		return render_to_response('admin.html', data)
 
+
+class AdUpdateView(UpdateView):
+	form_class = coreforms.AdUpdateForm
+	model = coremodels.Ad
+	template_name = 'form.html'
+	def get_initial(self):
+		variables = super(AdUpdateView, self).get_initial()
+		location_counters = self.object.locationcounter_set.all()
+		locs = []
+		for location_counter in location_counters:
+			locs.append(location_counter.location)
+
+		variables['location'] = locs
+		return variables
+	def form_valid(self, form):
+		# this ssaves the ad fields.
+		self.object = form.save()
+		# This saves the Location field. Copied from Ad Create view form_valid
+		ad_locations = form.cleaned_data['location']
+		  # [ do_something(x) for x in a_list_of_objects ]
+		loc_ids = self.object.locationcounter_set.all().values_list('id',flat=True)
+		LocationCounter.objects.filter(id__in= loc_ids).delete()
+		for loc in ad_locations:
+			loc_object = LocationCounter(ad=self.object, location=loc) # create location counters.
+			# these are for tracking hits 
+			loc_object.save()
+		return redirect('sales_agent')
 class AdCloseView(UpdateView):
 	form_class = coreforms.AdCloseForm
 
@@ -132,6 +158,7 @@ class AdCloseView(UpdateView):
 		coremodels.TopUp(closed_by = self.request.user.get_SalesAgent(), ad = self.object,
 						clicks = form.cleaned_data['clicks_promised'], 
 						money_paid = form.cleaned_data['money_negotiated'])
+		return redirect('sales_agent')
 		# print self.object.locationcounter_set.all()
 
 class AdCreateView(CreateView):
