@@ -36,7 +36,7 @@ def process_createAd(request):
 					contact_preference=contact_preference, only_ladies=only_ladies)
 		ad_obj.full_clean()
 		ad_obj.save()
-		return HttpResponse('saving...')
+		return HttpResponse(ad_obj.id)
 	return HttpResponse('description and phone_number not provided')
 
 @csrf_exempt

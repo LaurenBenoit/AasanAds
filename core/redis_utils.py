@@ -47,17 +47,17 @@ def put_ad(ad, clicks):
 		ad_mapping['bt'] = ad.button_label
 	if ad.status is not None:
 		ad_mapping['st'] = ad.status
-	pipeline1.hmset("ad:"+ad.id, ad_mapping)
+	pipeline1.hmset("ad:"+str(ad.id), ad_mapping)
 
 	# Add Ad_total_click_counter
-	pipeline1.set("ac:"+ad.id, "0")
+	pipeline1.set("ac:"+str(ad.id), "0")
 	# Add ad_id to Active_location_ads to redis.
 	locs = ad.getLocations()
 	for loc in locs:
-		pipeline1.sadd("la:"+loc, ad.id)
+		pipeline1.sadd("la:"+str(loc), ad.id)
 
 		# Add ad_location_click_counter
-		pipeline1.set("lc:"+ad.id+":" +loc, "0")
+		pipeline1.set("lc:"+str(ad.id)+":" +str(loc), "0")
 
 	pipeline1.execute()
 	

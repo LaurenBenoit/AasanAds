@@ -68,6 +68,12 @@ COOLDOWN_TIME = 5*60
 class SalesAgent(models.Model):
 	#https://docs.djangoproject.com/en/1.10/topics/db/examples/one_to_one/
 	user = models.OneToOneField(User, unique=True, primary_key=True)
+	
+	phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+	phone_number = models.CharField(validators=[phone_regex], max_length=20) # validators should be a list
+
+	location = models.IntegerField(choices=LOCATION, default=0)
+
 	user_rating = models.FloatField(default=0.0)
 	rating_count = models.IntegerField(default=0)
 	total_claimed = models.IntegerField(default=0)
@@ -126,7 +132,7 @@ class Topup(models.Model):
 	money_paid = models.IntegerField()
 	status = models.IntegerField(choices=TOPUP_STATUS, default=0)
 	expiry_time = models.DateTimeField()
-	clicks = models.IntegerField(default=0) 
+	clicks = models.IntegerField(default=0)
 	closed_by = models.ForeignKey(SalesAgent, null=True, blank=True)
 
 

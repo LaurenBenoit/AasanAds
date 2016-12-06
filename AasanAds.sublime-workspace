@@ -4,20 +4,48 @@
 		"selected_items":
 		[
 			[
-				"is_",
-				"is_superuser"
+				"core",
+				"coremodels"
+			],
+			[
+				"location",
+				"location_counter"
+			],
+			[
+				"locatio",
+				"locationcounter_set"
 			],
 			[
 				"get",
-				"get_context_data"
+				"get_initial"
 			],
 			[
 				"Ad",
-				"AdCreateForm"
+				"AdCloseForm"
 			],
 			[
-				"core",
-				"coreforms"
+				"as",
+				"as_view"
+			],
+			[
+				"templ",
+				"template_name"
+			],
+			[
+				"fo",
+				"form_class"
+			],
+			[
+				"my",
+				"my_claimed_ads"
+			],
+			[
+				"Htt",
+				"HttpResponseRedirect"
+			],
+			[
+				"is_",
+				"is_superuser"
 			],
 			[
 				"Crea",
@@ -124,14 +152,6 @@
 	"buffers":
 	[
 		{
-			"file": "core/models.py",
-			"settings":
-			{
-				"buffer_size": 3939,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "AasanAds/settings.py",
 			"settings":
 			{
@@ -152,7 +172,34 @@
 			"file": "core/urls.py",
 			"settings":
 			{
-				"buffer_size": 807,
+				"buffer_size": 926,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "core/models.py",
+			"settings":
+			{
+				"buffer_size": 4190,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "import redis\n\nPOOL = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0)\n\n##########Redis Namespace##########\n\n# dsadsa\n\n# dsasasd",
+			"file": "core/redis_utils.py",
+			"file_size": 130,
+			"file_write_time": 131254089460058579,
+			"settings":
+			{
+				"buffer_size": 134,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/xerox/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+			"settings":
+			{
+				"buffer_size": 88,
 				"line_ending": "Unix"
 			}
 		},
@@ -160,23 +207,24 @@
 			"file": "core/views.py",
 			"settings":
 			{
-				"buffer_size": 2869,
+				"buffer_size": 5544,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "core/forms.py",
+			"settings":
+			{
+				"buffer_size": 740,
+				"line_ending": "Unix",
+				"name": "forms.py"
 			}
 		},
 		{
 			"file": "core/templates/admin.html",
 			"settings":
 			{
-				"buffer_size": 76,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "core/admin.py",
-			"settings":
-			{
-				"buffer_size": 177,
+				"buffer_size": 107,
 				"line_ending": "Unix"
 			}
 		},
@@ -192,17 +240,8 @@
 			"file": "core/templates/SalesAgent.html",
 			"settings":
 			{
-				"buffer_size": 665,
+				"buffer_size": 1416,
 				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "core/forms.py",
-			"settings":
-			{
-				"buffer_size": 382,
-				"line_ending": "Unix",
-				"name": "forms.py"
 			}
 		}
 	],
@@ -317,6 +356,9 @@
 	],
 	"file_history":
 	[
+		"/home/xerox/.config/sublime-text-3/Packages/Default/Default (Linux).sublime-keymap",
+		"/home/xerox/ClubInternet/ads/AasanAds/core/api.py",
+		"/home/xerox/ClubInternet/ads/AasanAds/core/admin.py",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/templates/admin.html",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/templates/base.html",
 		"/home/xerox/Downloads/base2.js",
@@ -324,7 +366,6 @@
 		"/home/xerox/ClubInternet/aasaninternet-webapp/asaan/settings.py",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/redis_utils.py",
 		"/home/xerox/ClubInternet/coffeedapp/core/models.py",
-		"/home/xerox/ClubInternet/ads/AasanAds/core/admin.py",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/models.py",
 		"/home/xerox/ClubInternet/aasaninternet-webapp/core/urls.py",
 		"/home/xerox/ClubInternet/aasaninternet-webapp/core/views.py",
@@ -370,7 +411,6 @@
 		"/home/xerox/Downloads/PatariAPI-dev/api/patari/controllers/admin.js",
 		"/home/xerox/Downloads/PatariAPI-dev/api/patari/controllers/user.js",
 		"/home/xerox/summer-16/gruttle/config.js",
-		"/home/xerox/.config/sublime-text-3/Packages/Default/Default (Linux).sublime-keymap",
 		"/home/xerox/summer-16/gruttle/app/models/users.js",
 		"/home/xerox/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
 		"/home/xerox/ClubInternet/aasaninternet-webapp/cron_tasks/save_hits.d",
@@ -443,8 +483,7 @@
 		"/home/xerox/summer-16/httpsServer/SimplehttpServer/Serverthread.java",
 		"/home/xerox/summer-16/HTTP/RequestParse.java",
 		"/home/xerox/Downloads/HTTP/Securethread.java",
-		"/home/xerox/Downloads/HTTP/Serverthread.java",
-		"/home/xerox/ClubInternet/phptests (2)/180.xml"
+		"/home/xerox/Downloads/HTTP/Serverthread.java"
 	],
 	"find":
 	{
@@ -463,6 +502,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"ctrl+shift",
+			"ctrl+alt",
+			"alt",
+			"click",
+			"now",
+			"cleaned_",
+			"HttpR",
+			"form_va",
 			"super",
 			"redirect",
 			"title",
@@ -582,20 +629,12 @@
 			"flush",
 			"fault",
 			"evict",
-			">>",
-			"va",
-			"paging_mode",
-			"page_fault =",
-			"page_fault",
-			">page_fault(",
-			"page_fault(",
-			"page_fault",
-			"page_fault("
+			">>"
 		],
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": true,
+		"regex": false,
 		"replace_history":
 		[
 		],
@@ -608,40 +647,11 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 5,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "core/models.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3939,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1256,
-								1256
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1020.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
 					"file": "AasanAds/settings.py",
 					"semi_transient": false,
 					"settings":
@@ -653,8 +663,8 @@
 						"selection":
 						[
 							[
-								1584,
-								1584
+								3044,
+								3044
 							]
 						],
 						"settings":
@@ -664,14 +674,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 561.0,
+						"translation.y": 1568.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 1,
 					"file": "core/api.py",
 					"semi_transient": false,
 					"settings":
@@ -683,13 +693,43 @@
 						"selection":
 						[
 							[
-								415,
-								415
+								155,
+								155
 							]
 						],
 						"settings":
 						{
 							"auto_name": "api.py",
+							"history_list_is_closing": true,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 102.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "core/urls.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 926,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								857,
+								857
+							]
+						],
+						"settings":
+						{
 							"syntax": "Packages/Python/Python.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
@@ -702,48 +742,19 @@
 				},
 				{
 					"buffer": 3,
-					"file": "core/urls.py",
+					"file": "core/models.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 807,
+						"buffer_size": 4190,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								484,
-								484
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 33.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "core/views.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2869,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1684,
-								1689
+								3816,
+								3816
 							]
 						],
 						"settings":
@@ -752,55 +763,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 605.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "core/templates/admin.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 76,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								76,
-								76
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 204.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
-					"file": "core/admin.py",
+					"buffer": 4,
+					"file": "core/redis_utils.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 177,
+						"buffer_size": 134,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								114,
+								114
 							]
 						],
 						"settings":
@@ -811,11 +794,125 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/home/xerox/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 88,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								23,
+								23
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "core/views.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5544,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2840,
+								2840
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1173.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
 					"buffer": 7,
+					"file": "core/forms.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 740,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								605,
+								605
+							]
+						],
+						"settings":
+						{
+							"auto_name": "forms.py",
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "core/templates/admin.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 107,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								79,
+								79
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
 					"file": "core/templates/entrance.html",
 					"semi_transient": false,
 					"settings":
@@ -839,24 +936,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 10,
 					"file": "core/templates/SalesAgent.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 665,
+						"buffer_size": 1416,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								386,
-								386
+								871,
+								871
 							]
 						],
 						"settings":
@@ -865,39 +962,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 680.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "core/forms.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 382,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								382,
-								382
-							]
-						],
-						"settings":
-						{
-							"auto_name": "forms.py",
-							"syntax": "Packages/Python/Python.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
+					"stack_index": 6,
 					"type": "text"
 				}
 			]
@@ -992,7 +1060,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 207.0,
+	"side_bar_width": 146.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

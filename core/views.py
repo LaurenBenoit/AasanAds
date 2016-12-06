@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from sitegate.decorators import redirect_signedin, sitegate_view
 import datetime
 from django.utils import timezone
+import redis_utils
 
 def Hello(request, **kwargs):
 	return JsonResponse({'foo':'bar'})
@@ -26,7 +27,9 @@ def is_Agent(user):
 
 def adApprove(request, pk=None, *args, **kwargs):
 	if request.user.get_SalesAgent() is not None:
-		Ad.objects.get(id=pk).approve()
+		ad1 = Ad.objects.get(id=pk)
+		ad1.approve()
+		redis_utils.put_ad(ad1, 10)
 		# TODO: ADD ad to REDIS.
 	return redirect('sales_agent')
 
@@ -76,8 +79,8 @@ class Dashboard(View):
 			return HttpResponse("plz login")
 
 class SalesAgentCreateView(CreateView):
+	form_class = coreforms.AgentCreateForm
 	model = User
-	fields = ['password', 'email','username', 'first_name', 'last_name']
 	template_name = 'form.html'
 	def get_context_data(self,**kwargs):
 		if self.request.user.is_superuser:
@@ -92,6 +95,8 @@ class SalesAgentCreateView(CreateView):
 		self.object.save()
 		#----------
 		agent = coremodels.SalesAgent(user=self.object)
+		agent.location = form.cleaned_data["location"]
+		agent.phone_number = form.cleaned_data['phone_number']
 		agent.save()
 		return redirect('super_user')
 class Superuser(View):
