@@ -84,7 +84,7 @@ class SalesAgent(models.Model):
 	last_closing_time = models.DateTimeField(blank=True, null=True)
 	# Sales Agent can claim one ad per COOLDOWN_TIME.
 	last_ad_claim_time = models.DateTimeField(blank=True, null=True)
-
+	
 class Ad(models.Model):
 	title = models.TextField(null=True,blank=True)
 	description = models.TextField()
@@ -136,12 +136,17 @@ class Topup(models.Model):
 	closed_by = models.ForeignKey(SalesAgent, null=True, blank=True)
 
 
-
-class LocationCounter(models.Model):
-	#https://docs.djangoproject.com/en/1.10/ref/models/options/#unique-together
+class Locations(models.Model):
 	class Meta:
 		unique_together = (('ad', 'location'),)
 	ad = models.ForeignKey(Ad)
+	location = models.IntegerField(choices=LOCATION)
+
+class TopupLocationCounter(models.Model):
+	#https://docs.djangoproject.com/en/1.10/ref/models/options/#unique-together
+	class Meta:
+		unique_together = (('topup', 'location'),)
+	topup = models.ForeignKey(Topup)
 	location = models.IntegerField(choices=LOCATION, default=0)
 	clicks = models.IntegerField(default=0)
 

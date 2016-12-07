@@ -1,14 +1,15 @@
 import base64
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse, HttpResponse
-from core.models import LocationCounter,Ad
-
+from core.models import Locations,Ad
+import json
 from django.views.decorators.csrf import csrf_exempt
 
 
 
 def process_createAd(request):
-	if 'description' in request.POST and 'phone_number' in request.POST:
+	data = json.loads(request.body)
+	if 'description' in data and 'phone_number' in data:
 		title = None
 		address = None
 		link_url = None
@@ -16,26 +17,33 @@ def process_createAd(request):
 		button_label = 'Yeh Dubao!'
 		contact_preference = 0
 		only_ladies = 0
-		if 'title' in request.POST:
-			title = request.POST['title']
-		if 'address' in request.POST:
-			address = request.POST['address']
-		if 'link_url' in request.POST:
-			link_url = request.POST['link_url']
-		if 'image_url' in request.POST:
-			image_url = request.POST['image_url']
-		if 'button_label' in request.POST:
-			button_label = request.POST['button_label']
-		if 'contact_preference' in request.POST:
-			contact_preference = request.POST['contact_preference']
-		if 'only_ladies' in request.POST:
-			only_ladies = request.POST['only_ladies']
-		ad_obj = Ad(title= title,description=request.POST['description'],
-					phone_number=request.POST['phone_number'], address=address,
+		print data
+		if 'title' in data:
+			title = data['title']
+		if 'address' in data:
+			address = data['address']
+		if 'link_url' in data:
+			link_url = data['link_url']
+		if 'image_url' in data:
+			image_url = data['image_url']
+		if 'button_label' in data:
+			button_label = data['button_label']
+		if 'contact_preference' in data:
+			contact_preference = data['contact_preference']
+		if 'only_ladies' in data:
+			only_ladies = data['only_ladies']
+		if 'location' in data:
+			locations = data['location']
+		ad_obj = Ad(title= title,description=data['description'],
+					phone_number=data['phone_number'], address=address,
 					link_url=link_url,image_url=image_url, button_label=button_label,
 					contact_preference=contact_preference, only_ladies=only_ladies)
+
 		ad_obj.full_clean()
 		ad_obj.save()
+		for lo in data['location']:
+			l = Locations(ad=ad_obj, location=lo)
+			l.save()
 		return HttpResponse(ad_obj.id)
 	return HttpResponse('description and phone_number not provided')
 
@@ -51,7 +59,9 @@ def createAd(request,realm="", *args, **kwargs):
 				user = authenticate(username=uname, password=passwd)
 				if user is not None:
 					if user.is_superuser:
-
+						print request.META.keys()
+						print request.POST.keys()
+						print request.body
 						return process_createAd(request)
 					else:
 						return HttpResponse('Bad authentication')

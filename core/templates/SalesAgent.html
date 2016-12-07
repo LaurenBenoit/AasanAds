@@ -38,7 +38,7 @@ Unapproved Ads</h1>
 <tr>
 	<td>{{ad.id}}</td> <td> {{ad.title}}</td> <td>{{ad.description}}</td>  
 	<td>
-	{%  for loc in ad.locationcounter_set.all %}
+	{%  for loc in ad.locations_set.all %}
 		{{loc.get_location_display}}{% if not forloop.last %},{% endif %}
 	{% endfor %} 
 	</td>
@@ -69,7 +69,7 @@ Unpaid/Approved Ads
 
 	<tr><td>{{ad.id}}</td><td> {{ad.title}}</td><td> {{ad.description}}</td>   
 	<td>
-	{%  for loc in ad.locationcounter_set.all %}
+	{%  for loc in ad.locations_set.all %}
 		{{loc.get_location_display}}{% if not forloop.last %},{% endif %}
 	{% endfor %} 
 	</td>
@@ -86,7 +86,7 @@ Paused Ads
 {% for ad in paused_ads %}
 {{ad.title}} {{ad.description}}  id:{{ad.id}}  
 	Locations: 
-	{%  for loc in ad.locationcounter_set.all %}
+	{%  for loc in ad.locations_set.all %}
 		{{loc.get_location_display}},
 	{% endfor %} 
 	{% if can_claim %}
@@ -102,7 +102,7 @@ My Claimed Ads
 {% for ad in my_claimed_ads %}
 	{{ad.title}} {{ad.description}}  id:{{ad.id}}  
 	Locations: 
-	{%  for loc in ad.locationcounter_set.all %}
+	{%  for loc in ad.locations_set.all %}
 		{{loc.get_location_display}},
 	{% endfor %}
 	<a href="/ad/close/{{ad.id}}"><button > Close! </button> </a> 

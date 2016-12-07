@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.generic import View,TemplateView
 from django.views.generic.edit import CreateView, UpdateView
-from core.models import LocationCounter,Ad
+from core.models import Locations,Ad
 import redis_utils
 import core.models as coremodels
 import core.forms as coreforms
@@ -110,7 +110,7 @@ class AdUpdateView(UpdateView):
 	template_name = 'form.html'
 	def get_initial(self):
 		variables = super(AdUpdateView, self).get_initial()
-		location_counters = self.object.locationcounter_set.all()
+		location_counters = self.object.locations_set.all()
 		locs = []
 		for location_counter in location_counters:
 			locs.append(location_counter.location)
@@ -123,10 +123,10 @@ class AdUpdateView(UpdateView):
 		# This saves the Location field. Copied from Ad Create view form_valid
 		ad_locations = form.cleaned_data['location']
 		  # [ do_something(x) for x in a_list_of_objects ]
-		loc_ids = self.object.locationcounter_set.all().values_list('id',flat=True)
-		LocationCounter.objects.filter(id__in= loc_ids).delete()
+		loc_ids = self.object.locations_set.all().values_list('id',flat=True)
+		Locations.objects.filter(id__in= loc_ids).delete()
 		for loc in ad_locations:
-			loc_object = LocationCounter(ad=self.object, location=loc) # create location counters.
+			loc_object = Locations(ad=self.object, location=loc) # create location counters.
 			# these are for tracking hits 
 			loc_object.save()
 		return redirect('sales_agent')
@@ -138,7 +138,7 @@ class AdCloseView(UpdateView):
 	template_name = 'form.html'
 	def get_initial(self):
 		variables = super(AdCloseView, self).get_initial()
-		location_counters = self.object.locationcounter_set.all()
+		location_counters = self.object.locations_set.all()
 		locs = []
 		for location_counter in location_counters:
 			locs.append(location_counter.location)
@@ -151,7 +151,7 @@ class AdCloseView(UpdateView):
 		# This saves the Location field. Copied from Ad Create view form_valid
 		ad_locations = form.cleaned_data['location']
 		for loc in ad_locations:
-			loc_object = LocationCounter(ad=self.object, location=loc) # create location counters.
+			loc_object = Locations(ad=self.object, location=loc) # create location counters.
 			# these are for tracking hits 
 			loc_object.save()
 		#Saving a TopUp
@@ -159,7 +159,7 @@ class AdCloseView(UpdateView):
 						clicks = form.cleaned_data['clicks_promised'], 
 						money_paid = form.cleaned_data['money_negotiated'])
 		return redirect('sales_agent')
-		# print self.object.locationcounter_set.all()
+		# print self.object.locations_set.all()
 
 class AdCreateView(CreateView):
 	form_class = coreforms.AdCreateForm
@@ -170,10 +170,10 @@ class AdCreateView(CreateView):
 		self.object = form.save() # create the AD
 		ad_locations = form.cleaned_data['location']
 		for loc in ad_locations:
-			loc_object = LocationCounter(ad=self.object, location=loc) # create location counters.
+			loc_object = Locations(ad=self.object, location=loc) # create location counters.
 			# these are for tracking hits 
 			loc_object.save()
-		# print self.object.locationcounter_set.all()
+		# print self.object.locations_set.all()
 		return HttpResponse("saved!")
 
 		
