@@ -84,7 +84,7 @@ class SalesAgent(models.Model):
 	last_closing_time = models.DateTimeField(blank=True, null=True)
 	# Sales Agent can claim one ad per COOLDOWN_TIME.
 	last_ad_claim_time = models.DateTimeField(blank=True, null=True)
-	
+
 class Ad(models.Model):
 	title = models.TextField(null=True,blank=True)
 	description = models.TextField()
@@ -96,6 +96,7 @@ class Ad(models.Model):
 	button_label = models.TextField(default='Yeh Dubao!')
 	contact_preference = models.IntegerField(choices=PREFERENCE, default=0)
 	only_ladies = models.BooleanField(default=False)
+	is_damadam = models.BooleanField(default=True)
 	# auto add fields
 	status = models.IntegerField(choices=AD_STATUS, default=0)
 	submitted_time = models.DateTimeField(auto_now_add=True)
@@ -113,15 +114,15 @@ class Ad(models.Model):
 
 	def getLocations(self):
 		locs = []
-		for counterObject in self.locationcounter_set.all():
+		for counterObject in self.locations_set.all():
 			locs.append(counterObject.location)
 		return locs
 
 
 TOPUP_STATUS = (
-	(0, 'closed'),	#Telenor
-	(1, 'paid'),		#Zong
-	(2, 'expired')		#Ufone
+	(0, 'closed'),	#waiting for payment!
+	(1, 'paid'),		#PAID and LIVE.
+	(2, 'expired')		# expired. :(
 )
 
 class Topup(models.Model):

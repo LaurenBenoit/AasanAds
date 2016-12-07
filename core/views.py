@@ -110,12 +110,7 @@ class AdUpdateView(UpdateView):
 	template_name = 'form.html'
 	def get_initial(self):
 		variables = super(AdUpdateView, self).get_initial()
-		location_counters = self.object.locations_set.all()
-		locs = []
-		for location_counter in location_counters:
-			locs.append(location_counter.location)
-
-		variables['location'] = locs
+		variables['location'] = self.object.getLocations()
 		return variables
 	def form_valid(self, form):
 		# this ssaves the ad fields.
@@ -138,12 +133,7 @@ class AdCloseView(UpdateView):
 	template_name = 'form.html'
 	def get_initial(self):
 		variables = super(AdCloseView, self).get_initial()
-		location_counters = self.object.locations_set.all()
-		locs = []
-		for location_counter in location_counters:
-			locs.append(location_counter.location)
-
-		variables['location'] = locs
+		variables['location'] = self.object.getLocations()
 		return variables
 	def form_valid(self, form):
 		# this ssaves the ad fields.
@@ -159,7 +149,6 @@ class AdCloseView(UpdateView):
 						clicks = form.cleaned_data['clicks_promised'], 
 						money_paid = form.cleaned_data['money_negotiated'])
 		return redirect('sales_agent')
-		# print self.object.locations_set.all()
 
 class AdCreateView(CreateView):
 	form_class = coreforms.AdCreateForm
@@ -173,7 +162,6 @@ class AdCreateView(CreateView):
 			loc_object = Locations(ad=self.object, location=loc) # create location counters.
 			# these are for tracking hits 
 			loc_object.save()
-		# print self.object.locations_set.all()
 		return HttpResponse("saved!")
 
 		
