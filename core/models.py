@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import User
-
+import json
 
 def get_SalesAgent(self):
 	try:
@@ -62,6 +62,11 @@ PAISA_TYPES = (
 	(4,'mobilePaisa')	#Warid
 )
 
+APP_CODE = (
+	(0, 'all'),
+	(1, 'damadam')
+	)
+
 #Cool down time before SalesAgent can claim another ad
 COOLDOWN_TIME = 5*60
 
@@ -108,6 +113,18 @@ class Ad(models.Model):
 	#In order to get all LocationCounter call Ad.LocationCounter_set.all()
 	#https://docs.djangoproject.com/en/1.10/topics/db/examples/many_to_one/
 	# see example r.article_set.all()
+	def to_json(self):
+		data = {}
+		data['id'] = self.id
+		data['description'] = self.description
+		data['phone_number'] = self.phone_number
+		data['location'] = self.getLocations()
+		data['only_ladies'] = self.only_ladies
+		data['status'] = self.status
+		data['contact_preference'] = self.contact_preference
+		data['title'] = self.title
+		data['address'] = self.address
+		return data
 	def approve(self):
 		self.status = 1
 		self.save()

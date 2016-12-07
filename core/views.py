@@ -29,7 +29,10 @@ def adApprove(request, pk=None, *args, **kwargs):
 	if request.user.get_SalesAgent() is not None:
 		ad1 = Ad.objects.get(id=pk)
 		ad1.approve()
+		# put ad to my own redis.
 		redis_utils.put_ad(ad1, 10)
+		if ad1.damadam:
+			damadam_utils.sendAd(ad1,10)
 		# TODO: ADD ad to REDIS.
 	return redirect('sales_agent')
 

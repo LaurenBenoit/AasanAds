@@ -20,4 +20,6 @@ urlpatterns = [
 	url(r'^ad/close/(?P<pk>\d+)$', coreviews.AdCloseView.as_view()),
 
 	url(r'^api/ad/create/$', coreapi.createAd),
+	url(r'^api/postSMS/$', coreapi.process_SMS),
+
 ]
