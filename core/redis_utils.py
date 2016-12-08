@@ -17,7 +17,17 @@ name: "ac:" + str(ad_id). Will use increment on this number. Initially 0.
 
 Ad_location_click_counter
 String
-lc:{id}:{location_num}
+al:{id}:{location_num}
+name: "alc:" + str(ad_id) +":" + str(location). Will use increment on this number. Initially 0.
+
+Ad_total_impressions_counter
+String
+ic:{id}
+name: "ac:" + str(ad_id). Will use increment on this number. Initially 0.
+
+Ad_location_impressions_counter
+String
+il:{id}:{location_num}
 name: "alc:" + str(ad_id) +":" + str(location). Will use increment on this number. Initially 0.
 
 
@@ -51,16 +61,18 @@ def put_ad(ad, clicks):
 
 	# Add Ad_total_click_counter
 	pipeline1.set("ac:"+str(ad.id), "0")
+	pipeline1.set("ic:"+str(ad.id), "0")
 	# Add ad_id to Active_location_ads to redis.
-	locs = ad.getLocations()
+	locs = ad.getLocations() # locs is location array.
 	for loc in locs:
 		pipeline1.sadd("la:"+str(loc), ad.id)
 
 		# Add ad_location_click_counter
-		pipeline1.set("lc:"+str(ad.id)+":" +str(loc), "0")
+		pipeline1.set("al:"+str(ad.id)+":" +str(loc), "0")
+		pipeline1.set("il:"+str(ad.id)+":" +str(loc), "0")
 
 	pipeline1.execute()
 	
 
-def get_ad():
+def get_ad(location):
 	pass

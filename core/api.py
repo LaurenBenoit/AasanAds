@@ -17,6 +17,7 @@ def process_createAd(request):
 		button_label = 'Yeh Dubao!'
 		contact_preference = 0
 		only_ladies = 0
+		app_code = 0
 		print data
 		if 'title' in data:
 			title = data['title']
@@ -34,10 +35,12 @@ def process_createAd(request):
 			only_ladies = data['only_ladies']
 		if 'location' in data:
 			locations = data['location']
+		if 'app_code' in data:
+			app_code = data['app_code']
 		ad_obj = Ad(title= title,description=data['description'],
 					phone_number=data['phone_number'], address=address,
 					link_url=link_url,image_url=image_url, button_label=button_label,
-					contact_preference=contact_preference, only_ladies=only_ladies, is_damadam=True)
+					contact_preference=contact_preference, only_ladies=only_ladies, app_code=app_code)
 
 		ad_obj.full_clean()
 		ad_obj.save()
@@ -79,13 +82,13 @@ def process_SMS(request,realm="", *args, **kwargs):
 	msg = json.loads(request.body)
 	dictz ={}
 	diz = {'success' : True}
-	diz["task"] = 'send'
-	diz["messages"] =  [
-		{
-		"to": msg['from'],
-		"message": "Your message has been received!",
-		"uuid": "042c3515-ef6b-f424-c4qd"
-		}]
+	# diz["task"] = 'send'
+	# diz["messages"] =  [
+	# 	{
+	# 	"to": msg['from'],
+	# 	"message": "Your message has been received!",
+	# 	"uuid": "042c3515-ef6b-f424-c4qd"
+	# 	}]
 	dictz['payload'] = diz
 	print dictz
 	return JsonResponse(dictz)

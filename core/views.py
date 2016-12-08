@@ -13,6 +13,7 @@ from sitegate.decorators import redirect_signedin, sitegate_view
 import datetime
 from django.utils import timezone
 import redis_utils
+import damadam_utils
 
 def Hello(request, **kwargs):
 	return JsonResponse({'foo':'bar'})
@@ -31,7 +32,7 @@ def adApprove(request, pk=None, *args, **kwargs):
 		ad1.approve()
 		# put ad to my own redis.
 		redis_utils.put_ad(ad1, 10)
-		if ad1.damadam:
+		if ad1.app_code == 1 :
 			damadam_utils.sendAd(ad1,10)
 		# TODO: ADD ad to REDIS.
 	return redirect('sales_agent')

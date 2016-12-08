@@ -65,7 +65,7 @@ PAISA_TYPES = (
 APP_CODE = (
 	(0, 'all'),
 	(1, 'damadam')
-	)
+)
 
 #Cool down time before SalesAgent can claim another ad
 COOLDOWN_TIME = 5*60
@@ -101,7 +101,8 @@ class Ad(models.Model):
 	button_label = models.TextField(default='Yeh Dubao!')
 	contact_preference = models.IntegerField(choices=PREFERENCE, default=0)
 	only_ladies = models.BooleanField(default=False)
-	is_damadam = models.BooleanField(default=True)
+	app_code = models.IntegerField(default=0)
+	user_id = models.IntegerField(unique=True, blank=True, null=True)
 	# auto add fields
 	status = models.IntegerField(choices=AD_STATUS, default=0)
 	submitted_time = models.DateTimeField(auto_now_add=True)
