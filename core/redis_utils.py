@@ -35,8 +35,8 @@ Ad_Details
 Hash
 ad:{id}
 name: "ad:" + str(ad_id)
-{clicks, description, title, link_url, image_url, button_label, status}
-{cl, ds, ti, li, im, bt, st}
+{clicks, description, title, link_url, image_url, button_label, contact_preference, address, only_ladies, status}
+{cl, ds, ti, li, im, bt, st, cp, ad, ol}
 '''
 
 def put_ad(ad, clicks):
@@ -47,6 +47,9 @@ def put_ad(ad, clicks):
 	ad_mapping = {}
 	ad_mapping['cl'] = clicks
 	ad_mapping['ds'] = ad.description
+	ad_mapping['ol'] = ad.only_ladies
+	ad_mapping['cp'] = ad.contact_preference
+	
 	if ad.title is not None:
 		ad_mapping['ti'] = ad.title
 	if ad.link_url is not None:
@@ -57,6 +60,8 @@ def put_ad(ad, clicks):
 		ad_mapping['bt'] = ad.button_label
 	if ad.status is not None:
 		ad_mapping['st'] = ad.status
+	if ad.address is not None:
+		ad_mapping['ad'] = ad.address
 	pipeline1.hmset("ad:"+str(ad.id), ad_mapping)
 
 	# Add Ad_total_click_counter
