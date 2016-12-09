@@ -10,7 +10,7 @@ import datetime
 
 def process_updateAd(request):
 	data = json.loads(request.body)
-	
+
 
 def process_createAd(request):
 	data = json.loads(request.body)
@@ -79,14 +79,14 @@ def process_auth(request):
 @csrf_exempt
 def createAd(request,realm="", *args, **kwargs):
 	auth_result = process_auth(request)
-	if auth_result = True:
+	if auth_result == True:
 		return process_createAd(request)
 	return auth_result
 
 @csrf_exempt
 def updateAd(request,realm="", *args, **kwargs):
 	auth_result = process_auth(request)
-	if auth_result = True:
+	if auth_result == True:
 		return process_updateAd(request)
 	return auth_result
 

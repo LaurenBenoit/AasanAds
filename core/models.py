@@ -167,6 +167,7 @@ class TopupLocationCounter(models.Model):
 		unique_together = (('topup', 'location'),)
 	topup = models.ForeignKey(Topup)
 	location = models.IntegerField(choices=LOCATION, default=0)
+	impressions = models.IntegerField(default=0)
 	clicks = models.IntegerField(default=0)
 
 

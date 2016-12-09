@@ -96,9 +96,6 @@ def put_ad(ad, clicks):
 
 	pipeline1.execute()
 
-def save_ad(id):
-	pass
-
 def update_ad(ad_id, total_impressions, total_clicks, click_breakdown, impression_breakdown):
 	my_server.set("ic"+str(ad_id), total_impressions)
 	my_server.set("ac"+str(ad_id), total_clicks)
@@ -106,6 +103,12 @@ def update_ad(ad_id, total_impressions, total_clicks, click_breakdown, impressio
 	for loc in locs:
 		my_server.set("il:" +str(ad_id) +":"+str(loc), impression_breakdown[loc])
 		my_server.set("al:" +str(ad_id) +":"+str(loc), click_breakdown[loc])
+
+
+
+def save_ad(ad_id):
+	pass
+
 
 def delete_ad(ad_id):
 	ad_loc = my_server.hget("ad:"+ str(ad_id), "lo")
