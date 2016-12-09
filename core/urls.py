@@ -21,5 +21,6 @@ urlpatterns = [
 
 	url(r'^api/ad/create/$', coreapi.createAd),
 	url(r'^api/postSMS/$', coreapi.process_SMS),
+	url(r'^api/ad/update/$', coreapi.process_SMS),
 
 ]

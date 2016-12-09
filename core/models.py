@@ -170,4 +170,22 @@ class TopupLocationCounter(models.Model):
 	clicks = models.IntegerField(default=0)
 
 
-#TODO feature: EDIT description, title, etc.
+
+class SMSIncoming(models.Model):
+	secret = models.CharField(max_length=20, null=True, blank=True)
+	sender = models.CharField(max_length=20)
+	sent_timestamp = models.DateTimeField(null=True, blank=True)
+	time_recieved = models.DateTimeField(auto_now_add=True)
+	device_id = models.CharField(max_length=20,null=True, blank=True)
+	message = models.CharField(max_length=918,null=True, blank=True)
+
+OUTGOING_STATUS = (
+	(0, 'pending'),
+	(1, 'sent')
+)
+
+class SMSOutgoing(models.Model):
+	reciever = models.CharField(max_length=20)
+	message = models.CharField(max_length=918,null=True, blank=True)
+	status = models.IntegerField(choices=OUTGOING_STATUS, default=0)
+	sent_timestamp = models.DateTimeField(auto_now_add=True)

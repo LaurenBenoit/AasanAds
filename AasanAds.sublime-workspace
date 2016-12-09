@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"sen",
+				"sent_timestamp"
+			],
+			[
+				"sms",
+				"sms_msg"
+			],
+			[
 				"pip",
 				"pipeline1"
 			],
@@ -219,7 +227,7 @@
 			"file": "core/urls.py",
 			"settings":
 			{
-				"buffer_size": 1042,
+				"buffer_size": 1090,
 				"line_ending": "Unix"
 			}
 		},
@@ -227,7 +235,7 @@
 			"file": "core/models.py",
 			"settings":
 			{
-				"buffer_size": 5405,
+				"buffer_size": 6073,
 				"line_ending": "Unix"
 			}
 		},
@@ -235,33 +243,16 @@
 			"file": "core/api.py",
 			"settings":
 			{
-				"buffer_size": 2760,
+				"buffer_size": 4043,
 				"line_ending": "Unix",
 				"name": "api.py"
-			}
-		},
-		{
-			"contents": "//api\n\n\n1.\n/api/ad/create/\n\nPOST parameters with basic authentication.\ndescription , phone_number required\n\naddress, title, link_url, image_url, button_label, contact_preference, only_ladies\n\nreturns ad id.\n\n2.\n\n/api/user/adlist/ (unimplemented)\n\nPOST parameter with basic authentication\n\nid\n\nundiscussed- what information should we show? should we show amount paid last time? \n\n\n3. /api/getLiveAds/ (unimplemented)\n\nbasic authentication\n\nreturns json array of ads.\n\nan ad contains: id, impressions, clicks, description, title, link_url, image_url, button_label, status\n\n4. /api/saveLiveAd/ (unimplemented), pinged every once in a while.\n\nbasic authentication\nPOST params\nad id, ad impressions, ad clicks, ad_done:True/False\n\n\n5. /api/saveLiveAds/\n\npost array of ads.\n\nad contains ad id, ad impressions, ad clicks, ad_done:true/False",
-			"settings":
-			{
-				"buffer_size": 833,
-				"line_ending": "Unix",
-				"name": "//api"
-			}
-		},
-		{
-			"file": "core/redis_utils.py",
-			"settings":
-			{
-				"buffer_size": 1993,
-				"line_ending": "Unix"
 			}
 		},
 		{
 			"file": "core/views.py",
 			"settings":
 			{
-				"buffer_size": 6411,
+				"buffer_size": 6412,
 				"line_ending": "Unix"
 			}
 		},
@@ -272,6 +263,26 @@
 				"buffer_size": 436,
 				"line_ending": "Unix",
 				"name": "damadam_utils.py"
+			}
+		},
+		{
+			"file": "core/redis_utils.py",
+			"settings":
+			{
+				"buffer_size": 2316,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "import unirest\nfrom core.models import SMSOutgoing\nSMS_URL= 'http://shahz.pagekite.me/sendsms'\ndef send_sms(to, message):\n	unirest.get(url, params = {'phone':to, 'text':message}, callback = callback)\n\ndef callback(response):\n	sms = SMSOutgoing()\n",
+			"file": "core/sms_utils.py",
+			"file_size": 220,
+			"file_write_time": 131257607453476316,
+			"settings":
+			{
+				"buffer_size": 246,
+				"line_ending": "Unix",
+				"name": "sms_utils"
 			}
 		},
 		{
@@ -295,7 +306,7 @@
 			"file": "core/admin.py",
 			"settings":
 			{
-				"buffer_size": 213,
+				"buffer_size": 246,
 				"line_ending": "Unix"
 			}
 		},
@@ -427,6 +438,8 @@
 	],
 	"file_history":
 	[
+		"/home/xerox/ClubInternet/ads/AasanAds/api_specification.txt",
+		"/home/xerox/ClubInternet/ads/AasanAds/core/redis_utils.py",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/templates/admin.html",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/templates/abc.html",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/templates/base.html",
@@ -437,7 +450,6 @@
 		"/home/xerox/Downloads/base2.js",
 		"/home/xerox/Downloads/split.js",
 		"/home/xerox/ClubInternet/aasaninternet-webapp/asaan/settings.py",
-		"/home/xerox/ClubInternet/ads/AasanAds/core/redis_utils.py",
 		"/home/xerox/ClubInternet/coffeedapp/core/models.py",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/models.py",
 		"/home/xerox/ClubInternet/aasaninternet-webapp/core/urls.py",
@@ -553,8 +565,7 @@
 		"/home/xerox/summer-16/HTTP/WebServer.java",
 		"/home/xerox/summer-16/HTTP/Serverthread.java",
 		"/home/xerox/summer-16/httpsServer/README.md",
-		"/home/xerox/summer-16/httpsServer/SimplehttpServer/Serverthread.java",
-		"/home/xerox/summer-16/HTTP/RequestParse.java"
+		"/home/xerox/summer-16/httpsServer/SimplehttpServer/Serverthread.java"
 	],
 	"find":
 	{
@@ -573,6 +584,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"charfi",
 			"agent",
 			"json.",
 			"locations_set",
@@ -699,8 +711,7 @@
 			"trap_init()",
 			"trap_init();",
 			"TRAP_page_faul",
-			"TRAP_page_fault",
-			"page_fault"
+			"TRAP_page_fault"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -718,7 +729,7 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 7,
 			"sheets":
 			[
 				{
@@ -745,7 +756,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1479.0,
+						"translation.y": 1653.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 6,
@@ -757,15 +768,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1042,
+						"buffer_size": 1090,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								995,
-								995
+								1062,
+								1062
 							]
 						],
 						"settings":
@@ -777,7 +788,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -786,15 +797,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5405,
+						"buffer_size": 6073,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3172,
-								3172
+								5813,
+								5813
 							]
 						],
 						"settings":
@@ -803,7 +814,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1513.0,
+						"translation.y": 3135.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -815,107 +826,21 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2760,
+						"buffer_size": 4043,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								165,
-								161
+								3594,
+								3594
 							]
 						],
 						"settings":
 						{
 							"auto_name": "api.py",
 							"history_list_is_closing": true,
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 918.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 833,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								379,
-								379
-							]
-						],
-						"settings":
-						{
-							"auto_name": "//api",
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 51.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "core/redis_utils.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1993,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								596,
-								596
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "core/views.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6411,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								624,
-								624
-							]
-						],
-						"settings":
-						{
 							"syntax": "Packages/Python/Python.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
@@ -927,7 +852,36 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 4,
+					"file": "core/views.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6412,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6326,
+								6326
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2204.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
 					"file": "core/damadam_utils.py",
 					"semi_transient": false,
 					"settings":
@@ -952,7 +906,65 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "core/redis_utils.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2316,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2288,
+								2288
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1425.0,
+						"zoom_level": 1.0
+					},
 					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "core/sms_utils.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 246,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								244,
+								244
+							]
+						],
+						"settings":
+						{
+							"auto_name": "sms_utils",
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -982,7 +994,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -1004,13 +1016,14 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.tmLanguage"
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -1019,15 +1032,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 213,
+						"buffer_size": 246,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								182,
-								182
+								215,
+								215
 							]
 						],
 						"settings":
@@ -1038,7 +1051,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -1066,7 +1079,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -1095,7 +1108,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 7,
 					"type": "text"
 				}
 			]
@@ -1172,7 +1185,7 @@
 		[
 			[
 				"",
-				"~/ClubInternet/aasan.sublime-project"
+				"~/summer-16/sublime-plugin/custom_plugin.sublime-project"
 			]
 		],
 		"width": 380.0

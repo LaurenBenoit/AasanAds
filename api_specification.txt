@@ -1,0 +1,44 @@
+//api
+
+
+1.
+/api/ad/create/
+
+POST parameters with basic authentication.
+description , phone_number required
+
+address, title, link_url, image_url, button_label, contact_preference, only_ladies
+
+returns ad id.
+
+2.
+
+/api/user/adlist/ (unimplemented)
+
+POST parameter with basic authentication
+
+id
+
+undiscussed- what information should we show? should we show amount paid last time? 
+
+
+3. /api/getLiveAds/ (unimplemented)
+
+basic authentication
+
+returns json array of ads.
+
+an ad contains: id, impressions, clicks, description, title, link_url, image_url, button_label, status
+
+4. /api/saveLiveAd/ (unimplemented), pinged every once in a while.
+
+basic authentication
+POST params
+ad id, ad impressions, ad clicks, ad_done:True/False
+
+
+5. /api/saveLiveAds/
+
+post array of ads.
+
+ad contains ad id, ad impressions, ad clicks, ad_done:true/False

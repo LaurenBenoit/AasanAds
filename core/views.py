@@ -13,7 +13,7 @@ from sitegate.decorators import redirect_signedin, sitegate_view
 import datetime
 from django.utils import timezone
 import redis_utils
-import damadam_utils
+import damadam_utils 
 
 def Hello(request, **kwargs):
 	return JsonResponse({'foo':'bar'})

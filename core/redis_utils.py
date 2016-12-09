@@ -1,4 +1,6 @@
 import redis
+import uuid
+import json
 
 POOL = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0)
 
@@ -37,6 +39,22 @@ ad:{id}
 name: "ad:" + str(ad_id)
 {clicks, description, title, link_url, image_url, button_label, contact_preference, address, only_ladies, status}
 {cl, ds, ti, li, im, bt, st, cp, ad, ol}
+
+
+
+
+SMS_MODULE
+
+
+SMS_SEND_QUEUE
+
+LPUSH mylist "one"
+LPUSH mylist "two"
+LPUSH mylist "three"
+
+RPOP mylist
+
+
 '''
 
 def put_ad(ad, clicks):
@@ -77,7 +95,7 @@ def put_ad(ad, clicks):
 		pipeline1.set("il:"+str(ad.id)+":" +str(loc), "0")
 
 	pipeline1.execute()
-	
+
 
 def get_ad(location):
 	pass
