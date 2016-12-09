@@ -116,7 +116,6 @@ class Ad(models.Model):
 	# see example r.article_set.all()
 	def to_json(self):
 		data = {}
-		data['id'] = self.id
 		data['description'] = self.description
 		data['phone_number'] = self.phone_number
 		data['location'] = self.getLocations()
@@ -151,7 +150,7 @@ class Topup(models.Model):
 	time = models.DateTimeField(auto_now_add=True)
 	money_paid = models.IntegerField()
 	status = models.IntegerField(choices=TOPUP_STATUS, default=0)
-	expiry_time = models.DateTimeField()
+	expiry_time = models.DateTimeField(null=True, blank=True)
 	clicks = models.IntegerField(default=0)
 	total_clicks = models.IntegerField(default=0)
 	total_impressions = models.IntegerField(default=0)

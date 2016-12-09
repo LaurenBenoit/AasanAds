@@ -10,7 +10,7 @@ import datetime
 
 def process_updateAd(request):
 	data = json.loads(request.body)
-
+	
 
 def process_createAd(request):
 	data = json.loads(request.body)

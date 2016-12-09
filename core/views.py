@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.generic import View,TemplateView
 from django.views.generic.edit import CreateView, UpdateView
-from core.models import Locations,Ad
+from core.models import Locations,Ad, Topup, TopupLocationCounter
 import redis_utils
 import core.models as coremodels
 import core.forms as coreforms
@@ -31,11 +31,21 @@ def adApprove(request, pk=None, *args, **kwargs):
 	if request.user.get_SalesAgent() is not None:
 		ad1 = Ad.objects.get(id=pk)
 		ad1.approve()
+		clicks = 10
+		topup = Topup(ad = ad1,money_paid=0, status=2, clicks=clicks, 
+			closed_by=request.user.get_SalesAgent())
+		topup.save()
+		locs = ad1.getLocations()
+		topuplocationcounters = []
+		for loc in locs:
+			topuplocationcounters.append(TopupLocationCounter(topup=topup, location= loc))
+		TopupLocationCounter.objects.bulk_create(topuplocationcounters)
+
 		# put ad to my own redis.
-		redis_utils.put_ad(ad1, 10)
+		redis_utils.put_ad(ad1, clicks, topup.id)
 		sms_utils.send_sms(ad1.phone_number, SMS_MESSAGES.ad_approved)
 		if ad1.app_code == 1 :
-			damadam_utils.sendAd(ad1,10)
+			damadam_utils.sendAd(ad1,clicks, topup.id)
 		# TODO: ADD ad to REDIS.
 	return redirect('sales_agent')
 
