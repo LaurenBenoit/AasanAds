@@ -1,6 +1,9 @@
 import redis
 import uuid
 import json
+from django.utils.timezone import utc
+import datetime
+from core.models import *
 
 POOL = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0)
 
@@ -108,11 +111,24 @@ def update_ad(tid, total_impressions, total_clicks, click_breakdown, impression_
 		my_server.set("al:" +str(tid) +":"+str(loc), click_breakdown[loc])
 
 
+# AND EXPIRE.
+def save_ad(tid, if_expire):
+	topup = Topup.objects.get(id=tid)
+	topup.total_clicks = my_server.get("ac"+str(tid))
+	topup.total_impressions = my_server.get("ic"+str(tid))
+	if if_expire:
+		topup.status = 3 # STATUS is set to expire.
+		topup.expiry_time = datetime.datetime.now().replace(tzinfo=utc)
+	topup.save()
+	allcounters = topup.topuplocationcounter_set().all()
 
-def save_ad(tid):
-	
-
-
+	for topuploc in allcounters:
+		loc = topuploc.location
+		loc_impressions = my_server.get("il:" +str(tid) +":"+str(loc))
+		loc_clicks = my_server.get("al:" +str(tid) +":"+str(loc))
+		topuploc.impressions = loc_impressions
+		topuploc.clicks = loc_clicks
+		topuploc.save()
 def delete_ad(tid):
 	locs = my_server.hget("ad:"+ str(tid), "lo")
 	locs = locs[1:-1]
