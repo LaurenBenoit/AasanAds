@@ -152,6 +152,8 @@ class Topup(models.Model):
 	status = models.IntegerField(choices=TOPUP_STATUS, default=0)
 	expiry_time = models.DateTimeField()
 	clicks = models.IntegerField(default=0)
+	total_clicks = models.IntegerField(default=0)
+	total_impressions = models.IntegerField(default=0)
 	closed_by = models.ForeignKey(SalesAgent, null=True, blank=True)
 
 

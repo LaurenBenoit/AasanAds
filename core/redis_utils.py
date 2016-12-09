@@ -37,8 +37,8 @@ Ad_Details
 Hash
 ad:{id}
 name: "ad:" + str(ad_id)
-{clicks, description, title, link_url, image_url,locations, button_label, contact_preference, address, only_ladies, status}
-{cl, ds, ti, li, im, lo, bt, st, cp, ad, ol}
+{clicks, description, title, link_url, image_url,locations, button_label, contact_preference, address, only_ladies, status, topup_id}
+{cl, ds, ti, li, im, lo, bt, st, cp, ad, ol, tid}
 
 
 
@@ -57,7 +57,7 @@ RPOP mylist
 
 '''
 
-def put_ad(ad, clicks):
+def put_ad(ad, clicks, tid):
 	my_server = redis.Redis(connection_pool=POOL)
 	pipeline1 = my_server.pipeline()
 	
@@ -68,6 +68,7 @@ def put_ad(ad, clicks):
 	ad_mapping['ol'] = ad.only_ladies
 	ad_mapping['cp'] = ad.contact_preference
 	ad_mapping['lo'] = ad.getLocations()
+	ad_mapping['tid'] = tid
 	if ad.title is not None:
 		ad_mapping['ti'] = ad.title
 	if ad.link_url is not None:
@@ -93,13 +94,14 @@ def put_ad(ad, clicks):
 		# Add ad_location_click_counter
 		pipeline1.set("al:"+str(ad.id)+":" +str(loc), "0")
 		pipeline1.set("il:"+str(ad.id)+":" +str(loc), "0")
-
 	pipeline1.execute()
 
 def update_ad(ad_id, total_impressions, total_clicks, click_breakdown, impression_breakdown):
 	my_server.set("ic"+str(ad_id), total_impressions)
 	my_server.set("ac"+str(ad_id), total_clicks)
 	locs = my_server.hget("ad:"+str(ad_id),"lo")
+	locs = locs[1:-1]
+	locs = locs.split(", ")
 	for loc in locs:
 		my_server.set("il:" +str(ad_id) +":"+str(loc), impression_breakdown[loc])
 		my_server.set("al:" +str(ad_id) +":"+str(loc), click_breakdown[loc])
@@ -107,12 +109,14 @@ def update_ad(ad_id, total_impressions, total_clicks, click_breakdown, impressio
 
 
 def save_ad(ad_id):
-	pass
+	
 
 
 def delete_ad(ad_id):
-	ad_loc = my_server.hget("ad:"+ str(ad_id), "lo")
-	for loc in ad_loc:
+	locs = my_server.hget("ad:"+ str(ad_id), "lo")
+	locs = locs[1:-1]
+	locs = locs.split(", ")
+	for loc in locs:
 		my_server.delete("il:" +str(ad_id) +":"+str(loc))
 		my_server.delete("al:" +str(ad_id) +":"+str(loc))
 		my_server.srem("la:" + str(loc), ad_id)	
