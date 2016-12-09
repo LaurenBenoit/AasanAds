@@ -8,6 +8,10 @@ from django.views.decorators.csrf import csrf_exempt
 import datetime
 
 
+def process_updateAd(request):
+	data = json.loads(request.body)
+	
+
 def process_createAd(request):
 	data = json.loads(request.body)
 	if 'description' in data and 'phone_number' in data:
@@ -51,8 +55,7 @@ def process_createAd(request):
 		return HttpResponse(ad_obj.id)
 	return HttpResponse('description and phone_number not provided')
 
-@csrf_exempt
-def createAd(request,realm="", *args, **kwargs):
+def process_auth(request):
 	if 'HTTP_AUTHORIZATION' in request.META:
 		auth = request.META['HTTP_AUTHORIZATION'].split()
 		if len(auth) == 2:
@@ -63,18 +66,29 @@ def createAd(request,realm="", *args, **kwargs):
 				user = authenticate(username=uname, password=passwd)
 				if user is not None:
 					if user.is_superuser:
-						print request.META.keys()
-						print request.POST.keys()
-						print request.body
-						return process_createAd(request)
+						return True
 					else:
 						return HttpResponse('Bad authentication')
 				else:
-					return HttpResponse('No such user')              	
+					return HttpResponse('No such user')
 	response = HttpResponse()
 	response.status_code = 401
 	response['WWW-Authenticate'] = 'Basic realm="%s"' % realm
 	return response
+
+@csrf_exempt
+def createAd(request,realm="", *args, **kwargs):
+	auth_result = process_auth(request)
+	if auth_result = True:
+		return process_createAd(request)
+	return auth_result
+
+@csrf_exempt
+def updateAd(request,realm="", *args, **kwargs):
+	auth_result = process_auth(request)
+	if auth_result = True:
+		return process_updateAd(request)
+	return auth_result
 
 
 @csrf_exempt
@@ -126,8 +140,3 @@ def process_SMS(request,realm="", *args, **kwargs):
 			dictz['payload'] = diz
 			print dictz
 			return JsonResponse(dictz)
-
-@csrf_exempt
-def update_ad(request,realm="", *args, **kwargs):
-	print request.body
-	return HttpResponse('done')

@@ -37,8 +37,8 @@ Ad_Details
 Hash
 ad:{id}
 name: "ad:" + str(ad_id)
-{clicks, description, title, link_url, image_url, button_label, contact_preference, address, only_ladies, status}
-{cl, ds, ti, li, im, bt, st, cp, ad, ol}
+{clicks, description, title, link_url, image_url,locations, button_label, contact_preference, address, only_ladies, status}
+{cl, ds, ti, li, im, lo, bt, st, cp, ad, ol}
 
 
 
@@ -67,7 +67,7 @@ def put_ad(ad, clicks):
 	ad_mapping['ds'] = ad.description
 	ad_mapping['ol'] = ad.only_ladies
 	ad_mapping['cp'] = ad.contact_preference
-	
+	ad_mapping['lo'] = ad.getLocations()
 	if ad.title is not None:
 		ad_mapping['ti'] = ad.title
 	if ad.link_url is not None:
@@ -96,6 +96,26 @@ def put_ad(ad, clicks):
 
 	pipeline1.execute()
 
+def save_ad(id):
+	pass
+
+def update_ad(ad_id, total_impressions, total_clicks, click_breakdown, impression_breakdown):
+	my_server.set("ic"+str(ad_id), total_impressions)
+	my_server.set("ac"+str(ad_id), total_clicks)
+	locs = my_server.hget("ad:"+str(ad_id),"lo")
+	for loc in locs:
+		my_server.set("il:" +str(ad_id) +":"+str(loc), impression_breakdown[loc])
+		my_server.set("al:" +str(ad_id) +":"+str(loc), click_breakdown[loc])
+
+def delete_ad(ad_id):
+	ad_loc = my_server.hget("ad:"+ str(ad_id), "lo")
+	for loc in ad_loc:
+		my_server.delete("il:" +str(ad_id) +":"+str(loc))
+		my_server.delete("al:" +str(ad_id) +":"+str(loc))
+		my_server.srem("la:" + str(loc), ad_id)	
+	my_server.delete("ic" + str(ad_id))
+	my_server.delete("ac" + str(ad_id))
+	my_server.delete("ad" + str(ad_id))
 
 def get_ad(location):
 	pass

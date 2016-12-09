@@ -1,0 +1,1 @@
+ad_approved = "Apka ad approve ho gaya hai. Buht mubarik ho."

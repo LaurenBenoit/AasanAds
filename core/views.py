@@ -14,7 +14,8 @@ import datetime
 from django.utils import timezone
 import redis_utils
 import damadam_utils 
-
+import sms_utils
+import SMS_MESSAGES
 def Hello(request, **kwargs):
 	return JsonResponse({'foo':'bar'})
 # Create your views here.
@@ -32,6 +33,7 @@ def adApprove(request, pk=None, *args, **kwargs):
 		ad1.approve()
 		# put ad to my own redis.
 		redis_utils.put_ad(ad1, 10)
+		sms_utils.send_sms(ad1.phone_number, SMS_MESSAGES.ad_approved)
 		if ad1.app_code == 1 :
 			damadam_utils.sendAd(ad1,10)
 		# TODO: ADD ad to REDIS.
