@@ -140,7 +140,8 @@ class Ad(models.Model):
 TOPUP_STATUS = (
 	(0, 'closed'),	#waiting for payment!
 	(1, 'paid'),		#PAID and LIVE.
-	(2, 'expired')		# expired. :(
+	(2, 'free'), # THIS AD WAS an APPROVED AD AND ITS FREE.
+	(3, 'expired'),		# expired. :(
 )
 
 class Topup(models.Model):
