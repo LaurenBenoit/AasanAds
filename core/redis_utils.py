@@ -100,7 +100,8 @@ def put_ad(ad, clicks, tid):
 		pipeline1.set("il:"+str(tid)+":" +str(tid), "0")
 	pipeline1.execute()
 
-def update_ad(tid, total_impressions, total_clicks, click_breakdown, impression_breakdown):
+def update_ad(tid, total_impressions, total_clicks,impression_breakdown, click_breakdown ):
+	my_server = redis.Redis(connection_pool=POOL)
 	my_server.set("ic"+str(tid), total_impressions)
 	my_server.set("ac"+str(tid), total_clicks)
 	locs = my_server.hget("ad:"+str(tid),"lo")
@@ -113,6 +114,7 @@ def update_ad(tid, total_impressions, total_clicks, click_breakdown, impression_
 
 # AND EXPIRE.
 def save_ad(tid, if_expire):
+	my_server = redis.Redis(connection_pool=POOL)
 	topup = Topup.objects.get(id=tid)
 	topup.total_clicks = my_server.get("ac"+str(tid))
 	topup.total_impressions = my_server.get("ic"+str(tid))
@@ -120,7 +122,7 @@ def save_ad(tid, if_expire):
 		topup.status = 3 # STATUS is set to expire.
 		topup.expiry_time = datetime.datetime.now().replace(tzinfo=utc)
 	topup.save()
-	allcounters = topup.topuplocationcounter_set().all()
+	allcounters = topup.topuplocationcounter_set.all()
 
 	for topuploc in allcounters:
 		loc = topuploc.location
@@ -129,7 +131,15 @@ def save_ad(tid, if_expire):
 		topuploc.impressions = loc_impressions
 		topuploc.clicks = loc_clicks
 		topuploc.save()
+
+	# AD LIFECYCLE MANAGEMENT.
+	if topup.ad.status == 1:
+		topup.ad.status = 2
+	if topup.ad.status == 5:
+		topup.ad.status = 6
+	topup.ad.save()
 def delete_ad(tid):
+	my_server = redis.Redis(connection_pool=POOL)
 	locs = my_server.hget("ad:"+ str(tid), "lo")
 	locs = locs[1:-1]
 	locs = locs.split(", ")

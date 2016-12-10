@@ -6,11 +6,39 @@ import json
 from django.utils.timezone import utc
 from django.views.decorators.csrf import csrf_exempt
 import datetime
+import redis_utils
+import sms_utils
 
 
 def process_updateAd(request):
 	data = json.loads(request.body)
-	
+	print data
+	redis_utils.update_ad(data['tid'], data['ad_impressions'], data['ad_clicks'],
+		data['impression_breakdown'], data['click_breakdown'])
+	if data['ad_done'] == True:
+		redis_utils.save_ad(data['tid'], True)
+		redis_utils.delete_ad(data['tid'])
+		# also send SMS here.
+		
+		return HttpResponse('ad updated, saved,expired, deleted')
+	else:
+		return HttpResponse('ad updated. :)')
+	# TODO
+def bulk_updateAd(request):
+	list_data = json.loads(request.body)
+	response = []
+	for data in list_data:
+		redis_utils.update_ad(data['tid'], data['ad_impressions'], data['ad_clicks'],
+			data['impression_breakdown'], data['click_breakdown'])
+		if data['ad_done'] == True:
+			redis_utils.save_ad(data['tid'], True)
+			redis_utils.delete_ad(data['tid'])
+			# also send SMS here.
+			response.append('ad updated, saved,expired, deleted')
+		else:
+			response.append('ad updated.')
+	return JsonResponse(response)
+
 
 def process_createAd(request):
 	data = json.loads(request.body)
@@ -40,6 +68,8 @@ def process_createAd(request):
 			only_ladies = data['only_ladies']
 		if 'location' in data:
 			locations = data['location']
+		if 'app_code' in data:
+			app_code = data['app_code']
 		if 'app_code' in data:
 			app_code = data['app_code']
 		ad_obj = Ad(title= title,description=data['description'],
