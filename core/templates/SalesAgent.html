@@ -1,3 +1,4 @@
+
 <html>
 <head>
 <style type="text/css">
@@ -94,10 +95,15 @@ Paused Ads
 	{% endif %}
 	<br>
 {% endfor %}
+{% if not can_claim %}
+ {{timediff}}
+{% endif %}
 
 <h3>
 My Claimed Ads
 </h3>
+
+
 
 {% for ad in my_claimed_ads %}
 	{{ad.title}} {{ad.description}}  id:{{ad.id}}  

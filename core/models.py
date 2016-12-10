@@ -68,7 +68,7 @@ APP_CODE = (
 )
 
 #Cool down time before SalesAgent can claim another ad
-COOLDOWN_TIME = 5*60
+COOLDOWN_TIME = 10*60
 
 class SalesAgent(models.Model):
 	#https://docs.djangoproject.com/en/1.10/topics/db/examples/one_to_one/
@@ -155,8 +155,10 @@ class Topup(models.Model):
 	total_clicks = models.IntegerField(default=0)
 	total_impressions = models.IntegerField(default=0)
 	closed_by = models.ForeignKey(SalesAgent, null=True, blank=True)
-
-
+	secret_code = models.IntegerField()
+	cnic = models.CharField(null=True, blank=True,max_length=15)
+	phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+923334404403'.")
+	phone_number = models.CharField(validators=[phone_regex], max_length=20) # validators should be a list
 class Locations(models.Model):
 	class Meta:
 		unique_together = (('ad', 'location'),)

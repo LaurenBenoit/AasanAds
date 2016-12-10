@@ -15,6 +15,10 @@ class AdCloseForm(forms.ModelForm):
 											choices=LOCATION)	
 	clicks_promised = forms.IntegerField()
 	money_negotiated = forms.IntegerField()
+	cnic_regex = RegexValidator(regex=r'^[1-9]{13}', message="enter 13 digits without dashes.")
+	cnic = forms.CharField(validators=[cnic_regex], max_length=15)
+	phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+923334404403'.")
+	phone_number = forms.CharField(validators=[phone_regex], max_length=20)
 	class Meta:
 		fields = ['title', 'description', 'address', 'link_url', 'button_label', 'contact_preference']
 		model = coremodels.Ad

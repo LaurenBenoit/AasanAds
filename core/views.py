@@ -31,7 +31,7 @@ def adApprove(request, pk=None, *args, **kwargs):
 	if request.user.get_SalesAgent() is not None:
 		ad1 = Ad.objects.get(id=pk)
 		ad1.approve()
-		clicks = 10
+		clicks = 5
 		topup = Topup(ad = ad1,money_paid=0, status=2, clicks=clicks, 
 			closed_by=request.user.get_SalesAgent())
 		topup.save()
@@ -84,7 +84,7 @@ class Dashboard(View):
 				if timediff.seconds > coremodels.COOLDOWN_TIME:
 					can_claim = True
 			data = {'unapproved_ads':unapproved_ads,'approved_ads':approved_ads,
-					'paused_ads':paused_ads, 'can_claim': can_claim, 
+					'paused_ads':paused_ads,'timediff': timediff, 'can_claim': can_claim, 
 					'my_claimed_ads':my_claimed_ads}
 			return render_to_response('SalesAgent.html', data)
 		elif request.user.is_superuser:
@@ -168,12 +168,18 @@ class AdCloseView(UpdateView):
 			loc_object.save()
 		#Saving a TopUp
 		topup = coremodels.Topup(closed_by = self.request.user.get_SalesAgent(), ad = self.object,
-						clicks = form.cleaned_data['clicks_promised'], 
-						money_paid = form.cleaned_data['money_negotiated'])
+						clicks = form.cleaned_data['clicks_promised'],
+						cnic = form.cleaned_data['cnic'],
+						money_paid = form.cleaned_data['money_negotiated'],
+						phone_number = form.cleaned_data['phone_number']
+						)
+		topup.save()
 		topuplocationcounters = []
 		for loc in ad_locations:
 			topuplocationcounters.append(TopupLocationCounter(topup=topup, location= loc))
 		TopupLocationCounter.objects.bulk_create(topuplocationcounters)
+		self.object.status = 4
+		self.object.save()
 		return redirect('sales_agent')
 
 class AdCreateView(CreateView):

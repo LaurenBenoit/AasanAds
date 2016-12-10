@@ -19,7 +19,7 @@ def process_updateAd(request):
 		redis_utils.save_ad(data['tid'], True)
 		redis_utils.delete_ad(data['tid'])
 		# also send SMS here.
-		
+
 		return HttpResponse('ad updated, saved,expired, deleted')
 	else:
 		return HttpResponse('ad updated. :)')
@@ -122,51 +122,28 @@ def updateAd(request,realm="", *args, **kwargs):
 
 
 @csrf_exempt
-def process_SMS(request,realm="", *args, **kwargs):
-		print "print body\n"
-		print request.body
-		if 'task' in request.GET and request.GET['task'] == 'send':
-			dictz ={}
-			diz = {'secret' : ''}
-			diz["task"] = 'send'
-			diz["messages"] =  [
-				{
-				"to": '+923234837525',
-				"message": "SEND MESAGE!",
-				"uuid": "042cd515-zf6b-f424-c4qd"
-				}]
-			dictz['payload'] = diz
-			print dictz
-			return JsonResponse(dictz)
-		elif 'task' in request.GET and request.GET['task'] == 'sent':
-			return JsonResponse({
-    			"message_uuids": ["042cd515-zf6b-f424-c4qd"]
-			})
-		elif 'task' in request.GET and request.GET['task'] == 'result':
-			return JsonResponse({
-    			"message_uuids": ["042cd515-zf6b-f424-c4qd"]
-			})
-		else:
-			print "\n\n"
-			sms_msg = json.loads(request.body)
-			d_id = None
-			if 'device_id' in sms_msg:
-				d_id = sms_msg['device_id']
-			time = None
-			if 'sent_timestamp' in sms_msg:
-				time = datetime.datetime.fromtimestamp(int(sms_msg['sent_timestamp'])/1000.0).replace(tzinfo=utc)
-			sms = SMSIncoming(message=sms_msg['message'], sender= sms_msg['from'], secret=sms_msg['secret'],
-				device_id=d_id, sent_timestamp=time)
-			sms.save()
-			dictz ={}
-			diz = {'success' : True}
-			# diz["task"] = 'send'
-			# diz["messages"] =  [
-			# 	{
-			# 	"to": '+923234837525',
-			# 	"message": "Your message has been received!",
-			# 	"uuid": "042p3515-ef6b-f424-c4qd"
-			# 	}]
-			dictz['payload'] = diz
-			print dictz
-			return JsonResponse(dictz)
+def process_SMS(request,realm="", *args, **kwargs):		
+		print "\n\n"
+		sms_msg = json.loads(request.body)
+		d_id = None
+		if 'device_id' in sms_msg:
+			d_id = sms_msg['device_id']
+		time = None
+		if 'sent_timestamp' in sms_msg:
+			time = datetime.datetime.fromtimestamp(int(sms_msg['sent_timestamp'])/1000.0).replace(tzinfo=utc)
+		sms = SMSIncoming(message=sms_msg['message'], sender= sms_msg['from'], secret=sms_msg['secret'],
+			device_id=d_id, sent_timestamp=time)
+		sms.save()
+		sms_utils.parse_sms(sms_msg['from'], sms_msg['message'])
+		dictz ={}
+		diz = {'success' : True}
+		# diz["task"] = 'send'
+		# diz["messages"] =  [
+		# 	{
+		# 	"to": '+923234837525',
+		# 	"message": "Your message has been received!",
+		# 	"uuid": "042p3515-ef6b-f424-c4qd"
+		# 	}]
+		dictz['payload'] = diz
+		print dictz
+		return JsonResponse(dictz)

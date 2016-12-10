@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'sitegate',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'core',
 ]
 
