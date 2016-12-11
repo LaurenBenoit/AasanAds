@@ -20,7 +20,7 @@ def process_updateAd(request):
 		redis_utils.delete_ad(data['tid'])
 		# also send SMS here.
 
-		return HttpResponse('ad updated, saved,expired, deleted')
+		return HttpResponse('ad updated, saved, expired, deleted')
 	else:
 		return HttpResponse('ad updated. :)')
 	# TODO

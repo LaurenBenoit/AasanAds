@@ -54,13 +54,7 @@ PREFERENCE = (
 	(2, 'Text'),
 )
 
-PAISA_TYPES = (
-	(0, 'easyPaisa'),	#Telenor
-	(1, 'timePey'),		#Zong
-	(2, 'uPay'),		#Ufone
-	(3, 'jazzCash'),	#Jazz,mobilink
-	(4,'mobilePaisa')	#Warid
-)
+
 
 APP_CODE = (
 	(0, 'all'),
@@ -144,8 +138,6 @@ TOPUP_STATUS = (
 )
 
 class Topup(models.Model):
-	paisa_type =models.IntegerField(choices=PAISA_TYPES, default=0)
-	paisa_id = models.IntegerField(null=True, blank=True)
 	ad = models.ForeignKey(Ad)
 	time = models.DateTimeField(auto_now_add=True)
 	money_paid = models.IntegerField()
@@ -155,10 +147,24 @@ class Topup(models.Model):
 	total_clicks = models.IntegerField(default=0)
 	total_impressions = models.IntegerField(default=0)
 	closed_by = models.ForeignKey(SalesAgent, null=True, blank=True)
-	secret_code = models.IntegerField()
 	cnic = models.CharField(null=True, blank=True,max_length=15)
 	phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+923334404403'.")
 	phone_number = models.CharField(validators=[phone_regex], max_length=20) # validators should be a list
+	
+	def make_it_live():
+		locs = ad.getLocations()
+		topuplocationcounters = []
+		for loc in locs:
+			topuplocationcounters.append(TopupLocationCounter(topup=topup, location= loc))
+		TopupLocationCounter.objects.bulk_create(topuplocationcounters)
+		redis_utils.put_ad(ad, clicks, id)
+		if status == 2:
+			sms_utils.send_sms(ad1.phone_number, SMS_MESSAGES.ad_approved)
+		if status == 1:
+			sms_utils.send_sms(ad1.phone_number, SMS_MESSAGES.ad_live)
+
+		if ad.app_code == 1:
+			damadam_utils.sendAd(ad,clicks, id)
 class Locations(models.Model):
 	class Meta:
 		unique_together = (('ad', 'location'),)
@@ -188,9 +194,54 @@ OUTGOING_STATUS = (
 	(0, 'pending'),
 	(1, 'sent')
 )
+OUTGOING_TYPE = (
+	(0, 'ad_approved'),
+	(1, 'free clicks expired'),
+	(2, 'to agent_close_this_ad'),
+	(3, 'ad_approved'),
+	(4, 'iss number pai payment karein'),
+	(5, 'payment ho gaye. khoofia code bhejein'),
+	(6, 'to agent. khoofia code lein.'),
+	(7, 'ad_is_live'),
+	(8, 'itnay clicks reh gaye hain.'),
+	(9, 'ad_expired. '),
+	(10,'to agent. ad_expired'),
+	(11,'Custom')
+)
 
 class SMSOutgoing(models.Model):
+	topup = models.ForeignKey(Topup, null=True, blank=True)
+	type = models.IntegerField(choices= OUTGOING_TYPE)
 	reciever = models.CharField(max_length=20)
 	message = models.CharField(max_length=918,null=True, blank=True)
 	status = models.IntegerField(choices=OUTGOING_STATUS, default=0)
 	sent_timestamp = models.DateTimeField(auto_now_add=True)
+
+
+TRANSACTION_STATUS = (
+	(0, 'PENDING PAYMENT'),
+	(1, 'PENDING KHOOFIA CODE'), # only cnic to cnic.
+	(2, 'PAYMENT MADE'),
+	(3, 'PAYMENT LESS'),
+	(4, 'PAYMENT IS MORE'),
+	(5, 'Mismatched payment'),
+)
+
+PAISA_TYPES = (
+	(0, 'easyPaisa'),	#Telenor
+	(1, 'timePey'),		#Zong
+	(2, 'uPay'),		#Ufone
+	(3, 'jazzCash'),	#Jazz,mobilink
+	(4,'mobilePaisa')	#Warid
+)
+class Transaction(models.Model):
+	trx_id = models.IntegerField(null=True, blank=True)
+	status = models.IntegerField(choices=TRANSACTION_STATUS, default = 0)
+	paisa_type =models.IntegerField(choices=PAISA_TYPES, default=0)
+	topup = models.ForeignKey(Topup, null = True, blank= True)
+	phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+923334404403'.")
+	phone_number = models.CharField(validators=[phone_regex], max_length=20, db_index=True)
+	money = models.FloatField(null=True, blank=True)
+	cnic = models.CharField(null=True, blank=True,max_length=15, db_index=True)
+ 	secret_code = models.CharField(null=True, blank= True, max_length=10)
+ 	sms = models.OneToOneField(SMSIncoming, blank=True, null=True)

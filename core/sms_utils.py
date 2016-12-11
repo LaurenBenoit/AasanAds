@@ -1,7 +1,10 @@
 import unirest
 from core.models import SMSOutgoing
+from core.models import Transaction
 import functools
 import urllib
+import SMS_MESSAGES
+import re
 SMS_URL= 'http://shahz.pagekite.me/sendsms'
 def send_sms(to, message):
 	# to phone number must be in URI. for some reason unirest does not decode it!
@@ -17,7 +20,7 @@ def callback(to, message, response):
 	status = 0
 	if 'SENT!' in response.body:
 		status = 1
-	sms = SMSOutgoing(reciever=to, message=message,status = status)
+	sms = SMSOutgoing(reciever=to, message=message,status = status, topup=None, type= 11)
 	sms.save()
 
 def parse_sms(sender, message):
@@ -63,9 +66,38 @@ def parse_sms(sender, message):
 				money = float(msg_list[msg_list.index('rs.')+1])
 				print 'money'
 				print money
-
 				cnic = msg_list[msg_list.index('cnic')+1]
 				print 'cnic'
 				print cnic
-				pass
+				# LOOKUP CNIC TO topup.cnic
+				n = Transaction.objects.filter(cnic=cnic, status=0).count()
+				if n == 1:
+					trc= Transaction.objects.filter(cnic=cnic, status=0)
+					trc.money = money
+					trc.trx_id = trx_id
+					if trc.money >= trc.topup.money_paid:
+						trc.status = 1
+						if trc.money > trc.topup.money_paid:
+							trc.status = 4
+						trc.save()
+						send_sms(trc.phone_number, SMS_MESSAGES.khoofia)
+
+					elif trc.money < trc.topup.money_paid: 
+						trc.status = 3
+
+				else:
+					#  MAKE MISMATCHED PAYMENT here.
+					pass
+	elif sender != '3737' and 2 != 2:
+		khoofia = re.search('(\[^0-9])*\d{5}(\[^0-9])*',message,re.DEBUG)
+		n = Transaction.objects.filter(phone_number= sender, status=1).count()
+		if n == 1 and khoofia is not None:
+			trc= Transaction.objects.filter(phone_number= sender, status=1)
+			trc.secret_code = khoofia
+			trc.save()
+			trc.topup.make_it_live()
+		else:
+			# THIS IS A RANDOM NUMBER. SENDING US 
+			# TODO.
+			pass
 

@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.generic import View,TemplateView
 from django.views.generic.edit import CreateView, UpdateView
-from core.models import Locations,Ad, Topup, TopupLocationCounter
+from core.models import Locations,Ad, Topup, TopupLocationCounter, Transaction
 import redis_utils
 import core.models as coremodels
 import core.forms as coreforms
@@ -33,19 +33,12 @@ def adApprove(request, pk=None, *args, **kwargs):
 		ad1.approve()
 		clicks = 5
 		topup = Topup(ad = ad1,money_paid=0, status=2, clicks=clicks, 
-			closed_by=request.user.get_SalesAgent())
+			closed_by=request.user.get_SalesAgent(), phone_number=ad1.phone_number)
 		topup.save()
-		locs = ad1.getLocations()
-		topuplocationcounters = []
-		for loc in locs:
-			topuplocationcounters.append(TopupLocationCounter(topup=topup, location= loc))
-		TopupLocationCounter.objects.bulk_create(topuplocationcounters)
-
+		topup.make_it_live()
+		
 		# put ad to my own redis.
-		redis_utils.put_ad(ad1, clicks, topup.id)
-		sms_utils.send_sms(ad1.phone_number, SMS_MESSAGES.ad_approved)
-		if ad1.app_code == 1 :
-			damadam_utils.sendAd(ad1,clicks, topup.id)
+		
 		# TODO: ADD ad to REDIS.
 	return redirect('sales_agent')
 
@@ -174,6 +167,8 @@ class AdCloseView(UpdateView):
 						phone_number = form.cleaned_data['phone_number']
 						)
 		topup.save()
+		Transaction(status=0, topup=topup, phone_number=form.cleaned_data['phone_number'],
+			cnic=form.cleaned_data['cnic'])
 		topuplocationcounters = []
 		for loc in ad_locations:
 			topuplocationcounters.append(TopupLocationCounter(topup=topup, location= loc))
