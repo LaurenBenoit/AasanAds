@@ -97,7 +97,7 @@ def parse_sms(sender, message):
 			trc.save()
 			trc.topup.make_it_live()
 		else:
+			print 'dsds'
 			# THIS IS A RANDOM NUMBER. SENDING US 
 			# TODO.
 			pass
-

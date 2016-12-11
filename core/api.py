@@ -79,9 +79,10 @@ def process_createAd(request):
 
 		ad_obj.full_clean()
 		ad_obj.save()
+		loc_list = []
 		for lo in data['location']:
-			l = Locations(ad=ad_obj, location=lo)
-			l.save()
+			loc_list.append(Locations(ad=ad_obj, location=lo))
+		Locations.objects.bulk_create(loc_list)
 		return HttpResponse(ad_obj.id)
 	return HttpResponse('description and phone_number not provided')
 
