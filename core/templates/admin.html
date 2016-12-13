@@ -18,6 +18,18 @@ Pending SMS
 <br><br>
 {% endfor %}
 
+<h3> Inadequate Transaction
+</h3>
+
+{%  for tr in less_transaction %}
+{{tr.message}}
+{{tr.sms.message}}
+topup_id:{{tr.topup.id}}
+ad_id:{{tr.topup.ad.id}}
+<br><br>
+{% endfor %}
+
+
 <h3> Mismatched Transaction
 </h3>
 

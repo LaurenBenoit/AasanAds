@@ -53,6 +53,7 @@ def process_createAd(request):
 		only_ladies = 0
 		app_code = 0
 		print data
+		user_id =None
 		if 'title' in data:
 			title = data['title']
 		if 'address' in data:
@@ -71,12 +72,13 @@ def process_createAd(request):
 			locations = data['location']
 		if 'app_code' in data:
 			app_code = data['app_code']
-		if 'app_code' in data:
-			app_code = data['app_code']
+		if 'user_id' in data:
+			user_id = data['user_id']
 		ad_obj = Ad(title= title,description=data['description'],
 					phone_number=data['phone_number'], address=address,
 					link_url=link_url,image_url=image_url, button_label=button_label,
-					contact_preference=contact_preference, only_ladies=only_ladies, app_code=app_code)
+					contact_preference=contact_preference, only_ladies=only_ladies, app_code=app_code,
+					user_id=user_id)
 
 		ad_obj.full_clean()
 		ad_obj.save()
@@ -121,6 +123,24 @@ def updateAd(request,realm="", *args, **kwargs):
 	if auth_result == True:
 		return process_updateAd(request)
 	return auth_result
+
+@csrf_exempt
+def sendSMS(request,realm="", *args, **kwargs):
+	auth_result = process_auth(request)
+	if auth_result == True:
+		return process_sendSMS(request)
+	return auth_result
+
+def process_sendSMS(request):
+	data = json.loads(request.body)
+	tid = data['tid']
+	topup = Topup.objects.get(id=tid)
+	if 'sms' in data:
+		clicks_done = topup.clicks * (data[sms]/100.0)
+		clicks_rem = topup.clicks-clicks_done
+		sms_utils.send_sms(topup.phone_number, SMS_MESSAGES.ad_progress.format(clicks_done, clicks_rem), topup.ad)
+	elif 'sms_url' in data:
+		sms_utils.send_sms(topup.phone_number, SMS_MESSAGES.ad_approved.format(data['sms_url']),topup.ad)
 
 
 @csrf_exempt

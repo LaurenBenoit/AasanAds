@@ -98,7 +98,7 @@ class Ad(models.Model):
 	contact_preference = models.IntegerField(choices=PREFERENCE, default=0)
 	only_ladies = models.BooleanField(default=False)
 	app_code = models.IntegerField(default=0)
-	user_id = models.IntegerField(unique=True, blank=True, null=True)
+	user_id = models.IntegerField(blank=True, null=True)
 	# auto add fields
 	status = models.IntegerField(choices=AD_STATUS, default=0)
 	submitted_time = models.DateTimeField(auto_now_add=True)
@@ -120,6 +120,7 @@ class Ad(models.Model):
 		data['contact_preference'] = self.contact_preference
 		data['title'] = self.title
 		data['address'] = self.address
+		data['user_id'] = self.user_id
 		return data
 	def approve(self):
 		self.status = 1
@@ -134,9 +135,10 @@ class Ad(models.Model):
 
 TOPUP_STATUS = (
 	(0, 'awaiting_payment'),	#waiting for payment!
-	(1, 'paid'),		#PAID and LIVE.
+	(1, 'paid'),		#PAID and LIVE
 	(2, 'free'), # THIS AD WAS an APPROVED AD AND ITS FREE.
 	(3, 'expired'),		# expired. :(
+	(4, 'suspended')
 )
 
 class Topup(models.Model):
@@ -153,11 +155,36 @@ class Topup(models.Model):
 	phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+923334404403'.")
 	phone_number = models.CharField(validators=[phone_regex], max_length=20) # validators should be a list
 	
+	def resumeCall(self, response):
+		print response
+	def suspendCall(self, response):
+		print response
+	def resumeCall(self, response):
+		print response
+	def resumeReq(self):
+		if ad.app_code == 1:
+			import damadam_utils
+			damadam_utils.resumeTopup(self.id, self.resumeCall)	
+
+		# import functools
+	def suspendReq(self):
+		if ad.app_code == 1:
+			import damadam_utils
+			damadam_utils.suspendTopup(self.id, self.suspendCall)
+		# import functools
+	def deleteReq(self):
+		if ad.app_code == 1:
+			import damadam_utils
+			damadam_utils.deleteTopup(self.id, self.deleteCall)
+
 	def make_it_live(self):
 		locs = self.ad.getLocations()
 		topuplocationcounters = []
 		import sms_utils
 		import redis_utils
+
+		if self.ad.status == 4:
+			self.ad.status = 5
 		for loc in locs:
 			topuplocationcounters.append(TopupLocationCounter(topup=self, location= loc))
 		TopupLocationCounter.objects.bulk_create(topuplocationcounters)
@@ -236,6 +263,7 @@ TRANSACTION_STATUS = (
 	(3, 'PAYMENT VERIFIED'),
 	(4, 'PAYMENT IS LESS'),
 	(5, 'Mismatched payment'),
+	(6, 'PAYMENT IS MORE'),
 )
 
 PAISA_TYPES = (

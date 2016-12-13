@@ -5,6 +5,21 @@ damadam_pass = 'damadam1234'
 import json
 import unirest
 
+def deleteTopup(tid, callback):
+	data = {}
+	data['tid'] = tid
+	unirest.post(damadam_url + "/api/ad/delete/", headers={ "Content-type": "application/json" },params=data,  auth=(damadam_user, damadam_pass), callback=callback)
+def resumeTopup(tid, callback):
+	data = {}
+	data['tid'] = tid
+	unirest.post(damadam_url + "/api/ad/resume/", headers={ "Content-type": "application/json" },params=data,  auth=(damadam_user, damadam_pass), callback=callback)
+def suspendTopup(tid, callback):
+	data = {}
+	data['tid'] = tid
+	unirest.post(damadam_url + "/api/ad/suspend/", headers={ "Content-type": "application/json" },params=data,  auth=(damadam_user, damadam_pass), callback=callback)
+
+
+
 def sendAd(ad1, clicks, tid):
 	print 'data'
 	data = ad1.to_json()

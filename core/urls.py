@@ -12,6 +12,7 @@ urlpatterns = [
 	url(r'^superuser/createSalesAgent$', login_required(coreviews.SalesAgentCreateView.as_view())),
 	url(r'^superuser/allAds$', login_required(coreviews.AllAds.as_view())),
 	url(r'^superuser/resendSMS/(?P<pk>\d+)$', login_required(coreviews.resendSMS)),
+	url(r'^superuser/topup/suspend/(?P<pk>\d+)$', login_required(coreviews.suspendTopupAd)),
 
 	url(r'^$', coreviews.Hello),
 	url(r'^ad/create/$', coreviews.AdCreateView.as_view()),
@@ -22,8 +23,12 @@ urlpatterns = [
 	url(r'^ad/close/(?P<pk>\d+)$', coreviews.AdCloseView.as_view()),
 	url(r'^topup/khoofia/(?P<pk>\d+)$', coreviews.PutKhoofia.as_view()),
 
+
+
+	url(r'^api/ad/send_sms/$', coreapi.sendSMS),
 	url(r'^api/ad/create/$', coreapi.createAd),
 	url(r'^api/postSMS/$', coreapi.process_SMS),
 	url(r'^api/ad/update/$', coreapi.updateAd),
 
+	
 ]

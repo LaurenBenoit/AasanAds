@@ -129,9 +129,11 @@ class Superuser(View):
 		pending_payment = coremodels.Transaction.objects.filter(status=0)
 		pending_khoofia = coremodels.Transaction.objects.filter(status=1)
 		pending_khoofia_verification = coremodels.Transaction.objects.filter(status=2)
+		less_transaction = coremodels.Transaction.objects.filter(status=4)
 		data = {'pending_sms': pending_sms,'mismatched_transaction':mismatched_transaction, 
 		'pending_payment':pending_payment, 'pending_khoofia':pending_khoofia, 
-		'pending_khoofia_verification':pending_khoofia_verification}
+		'pending_khoofia_verification':pending_khoofia_verification,
+		'less_transaction':less_transaction}
 		return render_to_response('admin.html', data)
 
 
@@ -160,6 +162,11 @@ def resendSMS(request, pk=None, *args, **kwargs):
 
 	sms = coremodels.SMSOutgoing.objects.get(id=pk)
 	sms.resend()
+	return redirect('super_user')
+
+def suspendTopupAd(request, pk=None, *args, **kwargs):
+	topup = coremodels.Topup.objects.get(id=pk)
+	topup.suspend()
 	return redirect('super_user')
 
 

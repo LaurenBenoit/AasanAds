@@ -134,6 +134,8 @@ def save_ad(tid, if_expire):
 
 	# AD LIFECYCLE MANAGEMENT.
 	import sms_utils
+	print 'status'
+	print topup.ad.status
 	if topup.ad.status == 1:
 		sms_utils.send_sms(topup.ad.phone_number, SMS_MESSAGES.ad_expire_free, topup.ad)
 		topup.ad.status = 2

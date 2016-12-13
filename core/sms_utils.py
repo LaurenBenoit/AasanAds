@@ -89,13 +89,14 @@ def parse_sms(sender, message, smsincoming):
 					if trc.money >= trc.topup.money_paid:
 						trc.status = 1
 						if trc.money > trc.topup.money_paid:
-							trc.status = 4
+							trc.status = 6
 						trc.save()
 						send_sms(trc.phone_number, SMS_MESSAGES.ask_secret_code_advertiser, trc.topup.ad)
 						send_sms(trc.topup.closed_by.phone_number, SMS_MESSAGES.ask_secret_code_agent, trc.topup.ad)
 
 					elif trc.money < trc.topup.money_paid: 
-						trc.status = 3
+						Transaction(cnic= trc.cnic, status= 4, phone_number= trc.phone_number,
+							trx_id=trx_id,topup=trc.topup,money=money,sms=smsincoming).save()
 
 				else:
 					print 'mismatched payment'
@@ -104,7 +105,7 @@ def parse_sms(sender, message, smsincoming):
 					pass
 			else:
 				print 'some thing happened'
-	elif sender != '3737' and 2 != 2:
+	elif sender != '3737' and 2 == 2:
 		khoofia = re.search('(\[^0-9])*\d{5}(\[^0-9])*',message,re.DEBUG)
 		n = Transaction.objects.filter(phone_number= sender, status=1).count()
 		if n == 1 and khoofia is not None:
