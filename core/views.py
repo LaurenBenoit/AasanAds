@@ -2,7 +2,7 @@ from django.shortcuts import render, render_to_response
 from django.shortcuts import redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.generic import View,TemplateView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, FormView
 from core.models import Locations,Ad, Topup, TopupLocationCounter, Transaction
 import redis_utils
 import core.models as coremodels
@@ -16,6 +16,7 @@ import redis_utils
 import damadam_utils 
 import sms_utils
 import SMS_MESSAGES
+from django.views.generic.list import ListView
 def Hello(request, **kwargs):
 	return JsonResponse({'foo':'bar'})
 # Create your views here.
@@ -58,6 +59,17 @@ def adClaim(request, pk=None, *args, **kwargs):
 		agent.save()
 	return redirect('sales_agent')
 
+class PutKhoofia(UpdateView):
+	form_class = coreforms.DashboardKhoofiaForm
+	model = coremodels.Topup
+	template_name = 'form.html'
+	def form_valid(self, form):
+		# this ssaves the ad fields.
+		self.object = form.save()
+		self.object.make_it_live()
+		# This saves the Location field. Copied from Ad Create view form_valid
+		return redirect('sales_agent')
+
 class Dashboard(View):
 	def get(self, request, *args, **kwargs):
 		if request.user.get_SalesAgent() is not None:
@@ -66,9 +78,11 @@ class Dashboard(View):
 			paused_ads = Ad.objects.filter(status=2).all()
 			agent = request.user.get_SalesAgent()
 			my_claimed_ads = Ad.objects.filter(status=3, claimed_by=agent).all()
+			my_closed_topup = Topup.objects.filter(status=0, closed_by=agent).all()
 			# for ad in uapproved_ads:
 			# 	pass
 			can_claim = False
+			timediff = None
 			if agent.last_ad_claim_time is None:
 				can_claim = True
 			else:
@@ -78,7 +92,8 @@ class Dashboard(View):
 					can_claim = True
 			data = {'unapproved_ads':unapproved_ads,'approved_ads':approved_ads,
 					'paused_ads':paused_ads,'timediff': timediff, 'can_claim': can_claim, 
-					'my_claimed_ads':my_claimed_ads}
+					'my_claimed_ads':my_claimed_ads, 'my_closed_topup':my_closed_topup}
+
 			return render_to_response('SalesAgent.html', data)
 		elif request.user.is_superuser:
 			return redirect('super_user')
@@ -109,7 +124,14 @@ class SalesAgentCreateView(CreateView):
 		return redirect('super_user')
 class Superuser(View):
 	def get(self, request, *args, **kwargs):
-		data = {}
+		pending_sms = coremodels.SMSOutgoing.objects.filter(status=0)
+		mismatched_transaction = coremodels.Transaction.objects.filter(status=5)
+		pending_payment = coremodels.Transaction.objects.filter(status=0)
+		pending_khoofia = coremodels.Transaction.objects.filter(status=1)
+		pending_khoofia_verification = coremodels.Transaction.objects.filter(status=2)
+		data = {'pending_sms': pending_sms,'mismatched_transaction':mismatched_transaction, 
+		'pending_payment':pending_payment, 'pending_khoofia':pending_khoofia, 
+		'pending_khoofia_verification':pending_khoofia_verification}
 		return render_to_response('admin.html', data)
 
 
@@ -134,6 +156,16 @@ class AdUpdateView(UpdateView):
 			# these are for tracking hits 
 			loc_object.save()
 		return redirect('sales_agent')
+def resendSMS(request, pk=None, *args, **kwargs):
+
+	sms = coremodels.SMSOutgoing.objects.get(id=pk)
+	sms.resend()
+	return redirect('super_user')
+
+
+class AllAds(ListView):
+	model = coremodels.Ad
+	template_name = "ad_list.html"
 class AdCloseView(UpdateView):
 	form_class = coreforms.AdCloseForm
 
@@ -168,11 +200,11 @@ class AdCloseView(UpdateView):
 						)
 		topup.save()
 		Transaction(status=0, topup=topup, phone_number=form.cleaned_data['phone_number'],
-			cnic=form.cleaned_data['cnic'])
-		topuplocationcounters = []
-		for loc in ad_locations:
-			topuplocationcounters.append(TopupLocationCounter(topup=topup, location= loc))
-		TopupLocationCounter.objects.bulk_create(topuplocationcounters)
+			cnic=form.cleaned_data['cnic']).save()
+		# topuplocationcounters = []
+		# for loc in ad_locations:
+			# topuplocationcounters.append(TopupLocationCounter(topup=topup, location= loc))
+		# TopupLocationCounter.objects.bulk_create(topuplocationcounters)
 		self.object.status = 4
 		self.object.save()
 		return redirect('sales_agent')

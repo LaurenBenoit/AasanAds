@@ -133,10 +133,14 @@ def save_ad(tid, if_expire):
 		topuploc.save()
 
 	# AD LIFECYCLE MANAGEMENT.
+	import sms_utils
 	if topup.ad.status == 1:
+		sms_utils.send_sms(topup.ad.phone_number, SMS_MESSAGES.ad_expire_free, topup.ad)
 		topup.ad.status = 2
 	if topup.ad.status == 5:
-		topup.ad.status = 6
+		sms_utils.send_sms(topup.ad.phone_number, SMS_MESSAGES.ad_expire_paid_advertiser, topup.ad)
+		sms_utils.send_sms(topup.closed_by.phone_number, SMS_MESSAGES.ad_expire_paid_agent, topup.ad)
+		topup.ad.status = 7
 	topup.ad.save()
 def delete_ad(tid):
 	my_server = redis.Redis(connection_pool=POOL)

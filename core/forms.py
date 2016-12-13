@@ -15,7 +15,7 @@ class AdCloseForm(forms.ModelForm):
 											choices=LOCATION)	
 	clicks_promised = forms.IntegerField()
 	money_negotiated = forms.IntegerField()
-	cnic_regex = RegexValidator(regex=r'^[1-9]{13}', message="enter 13 digits without dashes.")
+	cnic_regex = RegexValidator(regex=r'^[0-9]{13,13}', message="enter 13 digits without dashes.")
 	cnic = forms.CharField(validators=[cnic_regex], max_length=15)
 	phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+923334404403'.")
 	phone_number = forms.CharField(validators=[phone_regex], max_length=20)
@@ -41,3 +41,10 @@ class AgentCreateForm(forms.ModelForm):
 	class Meta:
 		fields = ['username','password', 'first_name', 'last_name', ]
 		model = coremodels.User
+
+class DashboardKhoofiaForm(forms.ModelForm):
+	numeric = RegexValidator(r'^[0-9]{5,5}$', 'Only 5 digit numeric field allowed.')
+	khoofia = forms.CharField(required = True, validators = [numeric], max_length=5)
+	class Meta:
+		fields = ['khoofia']
+		model = coremodels.Topup

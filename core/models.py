@@ -3,6 +3,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import User
 import json
+import SMS_MESSAGES
 
 def get_SalesAgent(self):
 	try:
@@ -19,8 +20,9 @@ AD_STATUS = (
 	(3, 'Claimed'),			# Not Running - Claimed by some specific Agent.
 	(4, 'Closed'),			# Not Running - Awaiting Verification.
 	(5, 'Running'),			# Running.
-	(6, 'Stopped'),			# Not Running
-	(7, 'Expired')
+	(6, 'Suspended'),		# Not Running
+	(7, 'Stopped'),			# Not Running
+	(8, 'Expired')
 )
 
 LOCATION = (
@@ -62,7 +64,7 @@ APP_CODE = (
 )
 
 #Cool down time before SalesAgent can claim another ad
-COOLDOWN_TIME = 10*60
+COOLDOWN_TIME = 2*60
 
 class SalesAgent(models.Model):
 	#https://docs.djangoproject.com/en/1.10/topics/db/examples/one_to_one/
@@ -131,7 +133,7 @@ class Ad(models.Model):
 
 
 TOPUP_STATUS = (
-	(0, 'closed'),	#waiting for payment!
+	(0, 'awaiting_payment'),	#waiting for payment!
 	(1, 'paid'),		#PAID and LIVE.
 	(2, 'free'), # THIS AD WAS an APPROVED AD AND ITS FREE.
 	(3, 'expired'),		# expired. :(
@@ -151,20 +153,24 @@ class Topup(models.Model):
 	phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+923334404403'.")
 	phone_number = models.CharField(validators=[phone_regex], max_length=20) # validators should be a list
 	
-	def make_it_live():
-		locs = ad.getLocations()
+	def make_it_live(self):
+		locs = self.ad.getLocations()
 		topuplocationcounters = []
+		import sms_utils
+		import redis_utils
 		for loc in locs:
-			topuplocationcounters.append(TopupLocationCounter(topup=topup, location= loc))
+			topuplocationcounters.append(TopupLocationCounter(topup=self, location= loc))
 		TopupLocationCounter.objects.bulk_create(topuplocationcounters)
-		redis_utils.put_ad(ad, clicks, id)
-		if status == 2:
-			sms_utils.send_sms(ad1.phone_number, SMS_MESSAGES.ad_approved)
-		if status == 1:
-			sms_utils.send_sms(ad1.phone_number, SMS_MESSAGES.ad_live)
+		redis_utils.put_ad(self.ad, self.clicks, self.id)
+		if self.status == 2:
+			sms_utils.send_sms(self.phone_number, SMS_MESSAGES.ad_approved, self.ad)
+		if self.status == 1:
+			sms_utils.send_sms(self.phone_number, SMS_MESSAGES.ad_live, self.ad)
 
-		if ad.app_code == 1:
-			damadam_utils.sendAd(ad,clicks, id)
+		if self.ad.app_code == 1:
+			import damadam_utils
+			damadam_utils.sendAd(self.ad,self.clicks, self.id)
+
 class Locations(models.Model):
 	class Meta:
 		unique_together = (('ad', 'location'),)
@@ -210,20 +216,25 @@ OUTGOING_TYPE = (
 )
 
 class SMSOutgoing(models.Model):
+	ad = models.ForeignKey(Ad, null=True, blank=True)
 	topup = models.ForeignKey(Topup, null=True, blank=True)
 	type = models.IntegerField(choices= OUTGOING_TYPE)
 	reciever = models.CharField(max_length=20)
 	message = models.CharField(max_length=918,null=True, blank=True)
 	status = models.IntegerField(choices=OUTGOING_STATUS, default=0)
 	sent_timestamp = models.DateTimeField(auto_now_add=True)
+	def resend(self):
+		import sms_utils
+		sms_utils.resend_sms(self)
+
 
 
 TRANSACTION_STATUS = (
 	(0, 'PENDING PAYMENT'),
 	(1, 'PENDING KHOOFIA CODE'), # only cnic to cnic.
-	(2, 'PAYMENT MADE'),
-	(3, 'PAYMENT LESS'),
-	(4, 'PAYMENT IS MORE'),
+	(2, 'PAYMENT unverified'),
+	(3, 'PAYMENT VERIFIED'),
+	(4, 'PAYMENT IS LESS'),
 	(5, 'Mismatched payment'),
 )
 

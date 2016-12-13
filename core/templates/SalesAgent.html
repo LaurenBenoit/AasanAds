@@ -106,7 +106,7 @@ My Claimed Ads
 
 
 {% for ad in my_claimed_ads %}
-	{{ad.title}} {{ad.description}}  id:{{ad.id}}  
+	{{ad.title}} {{ad.description}} {{ad.phone_number}}  id:{{ad.id}}  
 	Locations: 
 	{%  for loc in ad.locations_set.all %}
 		{{loc.get_location_display}},
@@ -116,7 +116,14 @@ My Claimed Ads
 	<br>
 {% endfor %}
 
+<h3>
+My Closed Topup(Awaiting payment)
+</h3>
 
+{% for topup in my_closed_topup %}
+	{{topup.ad.title}} {{topup.phone_number}} {{topup.cnic}} Money:{{topup.money_paid}} Clicks:{{topup.clicks}}
+	<a href='/topup/khoofia/{{topup.id}}'>put khoofia</a>
+{% endfor %}
 
 
 <a href='logout'> Logout </a>

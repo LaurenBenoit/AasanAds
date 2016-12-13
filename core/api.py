@@ -1,13 +1,14 @@
 import base64
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse, HttpResponse
-from core.models import Locations,Ad, SMSIncoming
+from core.models import Locations,Ad, SMSIncoming, Topup
 import json
 from django.utils.timezone import utc
 from django.views.decorators.csrf import csrf_exempt
 import datetime
 import redis_utils
 import sms_utils
+import SMS_MESSAGES
 
 
 def process_updateAd(request):
@@ -135,7 +136,7 @@ def process_SMS(request,realm="", *args, **kwargs):
 		sms = SMSIncoming(message=sms_msg['message'], sender= sms_msg['from'], secret=sms_msg['secret'],
 			device_id=d_id, sent_timestamp=time)
 		sms.save()
-		sms_utils.parse_sms(sms_msg['from'], sms_msg['message'])
+		sms_utils.parse_sms(sms_msg['from'], sms_msg['message'], sms)
 		dictz ={}
 		diz = {'success' : True}
 		# diz["task"] = 'send'

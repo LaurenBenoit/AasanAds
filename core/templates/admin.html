@@ -1,5 +1,47 @@
 Hello, Mr Admin
 
+<br>
+<br>
 Make a new Sales Agent, <a href='createSalesAgent'>here</a>
+<br>
+<br>
+See ALL Ads
+<a href='/superuser/allAds'>here</a>
+
+<h3>
+Pending SMS
+</h3>
+{%  for sms in pending_sms %}
+{{sms.message}}
+{{sms.reciever}}
+{{sms.ad.description}} <a href="/superuser/resendSMS/{{sms.id}}">resend</a>
+<br><br>
+{% endfor %}
+
+<h3> Mismatched Transaction
+</h3>
+
+{%  for tr in mismatched_transaction %}
+{{tr.message}}
+{{tr.sms.message}}
+
+<br><br>
+{% endfor %}
+
+<h3> All pending payments
+</h3>
+{%  for pp in pending_payment %}
+{{pp.topup}}
+
+<br><br>
+{% endfor %}
+
+
+<h3> All pending Khoofia payments
+</h3>
+
+
+<h3> Pending khoofia verification
+</h3>
 
 <a href='/dashboard/logout'> Logout </a>

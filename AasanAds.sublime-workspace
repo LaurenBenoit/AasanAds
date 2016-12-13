@@ -4,12 +4,104 @@
 		"selected_items":
 		[
 			[
-				"sen",
-				"sent_timestamp"
+				"pendin",
+				"pending_khoofia_verification"
+			],
+			[
+				"rec",
+				"reciever"
 			],
 			[
 				"sms",
-				"sms_msg"
+				"smsincoming"
+			],
+			[
+				"loc",
+				"loc_list"
+			],
+			[
+				"money",
+				"money_paid"
+			],
+			[
+				"OUT",
+				"OUTGOING_TYPE"
+			],
+			[
+				"SMS",
+				"SMSIncoming"
+			],
+			[
+				"Tra",
+				"TRANSACTION_STATUS"
+			],
+			[
+				"cnic",
+				"cnic_regex"
+			],
+			[
+				"index",
+				"index_of_num"
+			],
+			[
+				"inde",
+				"index_of_num"
+			],
+			[
+				"msg",
+				"msg_list"
+			],
+			[
+				"old",
+				"old_locs"
+			],
+			[
+				"location",
+				"locations_set"
+			],
+			[
+				"TopU",
+				"TopupLocationCounter"
+			],
+			[
+				"top",
+				"topuplocationcounters"
+			],
+			[
+				"get",
+				"getLocations"
+			],
+			[
+				"all",
+				"allcounters"
+			],
+			[
+				"tota",
+				"total_clicks"
+			],
+			[
+				"click",
+				"click_breakdown"
+			],
+			[
+				"total",
+				"total_clicks"
+			],
+			[
+				"ad",
+				"ad_id"
+			],
+			[
+				"my",
+				"my_server"
+			],
+			[
+				"auth",
+				"auth_result"
+			],
+			[
+				"sen",
+				"sent_timestamp"
 			],
 			[
 				"pip",
@@ -44,10 +136,6 @@
 				"phone_number"
 			],
 			[
-				"ad",
-				"ad_obj"
-			],
-			[
 				"bor",
 				"border-spacing"
 			],
@@ -76,20 +164,12 @@
 				"pipeline1"
 			],
 			[
-				"location",
-				"location_num"
-			],
-			[
 				"core",
 				"coremodels"
 			],
 			[
 				"locatio",
 				"locationcounter_set"
-			],
-			[
-				"get",
-				"get_initial"
 			],
 			[
 				"Ad",
@@ -106,10 +186,6 @@
 			[
 				"fo",
 				"form_class"
-			],
-			[
-				"my",
-				"my_claimed_ads"
 			],
 			[
 				"Htt",
@@ -216,26 +292,10 @@
 	"buffers":
 	[
 		{
-			"file": "AasanAds/settings.py",
-			"settings":
-			{
-				"buffer_size": 3383,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "core/urls.py",
 			"settings":
 			{
-				"buffer_size": 1090,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "core/models.py",
-			"settings":
-			{
-				"buffer_size": 6073,
+				"buffer_size": 1157,
 				"line_ending": "Unix"
 			}
 		},
@@ -243,7 +303,7 @@
 			"file": "core/api.py",
 			"settings":
 			{
-				"buffer_size": 4043,
+				"buffer_size": 4646,
 				"line_ending": "Unix",
 				"name": "api.py"
 			}
@@ -252,46 +312,26 @@
 			"file": "core/views.py",
 			"settings":
 			{
-				"buffer_size": 6412,
+				"buffer_size": 8411,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "core/damadam_utils.py",
+			"contents": "Searching 33 files for \"send_sms\" (regex)\n\n/home/xerox/ClubInternet/ads/AasanAds/core/models.py:\n  164  		redis_utils.put_ad(self.ad, self.clicks, self.id)\n  165  		if self.status == 2:\n  166: 			sms_utils.send_sms(self.phone_number, SMS_MESSAGES.ad_approved)\n  167  		if self.status == 1:\n  168: 			sms_utils.send_sms(self.phone_number, SMS_MESSAGES.ad_live)\n  169  \n  170  		if self.ad.app_code == 1:\n\n/home/xerox/ClubInternet/ads/AasanAds/core/redis_utils.py:\n  136  	import sms_utils\n  137  	if topup.ad.status == 1:\n  138: 		sms_utils.send_sms(topup.ad.phone_number, SMS_MESSAGES.ad_expire_free)\n  139  		topup.ad.status = 2\n  140  	if topup.ad.status == 5:\n  141: 		sms_utils.send_sms(topup.ad.phone_number, SMS_MESSAGES.ad_expire_paid_advertiser)\n  142: 		sms_utils.send_sms(topup.closed_by.phone_number, SMS_MESSAGES.ad_expire_paid_agent)\n  143  		topup.ad.status = 7\n  144  	topup.ad.save()\n\n/home/xerox/ClubInternet/ads/AasanAds/core/sms_utils.py:\n    7  import re\n    8  SMS_URL= 'http://shahz.pagekite.me/sendsms'\n    9: def send_sms(to, message, ad):\n   10  	# to phone number must be in URI. for some reason unirest does not decode it!\n   11  	unirest.get(SMS_URL, params = {'phone':urllib.pathname2url(to), 'text':message}, callback = functools.partial(callback, to, message, ad))\n   ..\n   83  							trc.status = 4\n   84  						trc.save()\n   85: 						send_sms(trc.phone_number, SMS_MESSAGES.ask_secret_code_advertiser)\n   86: 						send_sms(trc.topup.closed_by.phone_number, SMS_MESSAGES.ask_secret_code_agent)\n   87  \n   88  					elif trc.money < trc.topup.money_paid: \n\n8 matches across 3 files\n",
 			"settings":
 			{
-				"buffer_size": 436,
+				"buffer_size": 1614,
 				"line_ending": "Unix",
-				"name": "damadam_utils.py"
+				"name": "Find Results",
+				"scratch": true
 			}
 		},
 		{
-			"file": "core/redis_utils.py",
-			"settings":
-			{
-				"buffer_size": 2316,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "import unirest\nfrom core.models import SMSOutgoing\nSMS_URL= 'http://shahz.pagekite.me/sendsms'\ndef send_sms(to, message):\n	unirest.get(url, params = {'phone':to, 'text':message}, callback = callback)\n\ndef callback(response):\n	sms = SMSOutgoing()\n",
 			"file": "core/sms_utils.py",
-			"file_size": 220,
-			"file_write_time": 131257607453476316,
 			"settings":
 			{
-				"buffer_size": 246,
-				"line_ending": "Unix",
-				"name": "sms_utils"
-			}
-		},
-		{
-			"file": "core/forms.py",
-			"settings":
-			{
-				"buffer_size": 1654,
-				"line_ending": "Unix",
-				"name": "forms.py"
+				"buffer_size": 3560,
+				"line_ending": "Unix"
 			}
 		},
 		{
@@ -303,26 +343,58 @@
 			}
 		},
 		{
-			"file": "core/admin.py",
-			"settings":
-			{
-				"buffer_size": 246,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "core/templates/entrance.html",
-			"settings":
-			{
-				"buffer_size": 432,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "core/templates/SalesAgent.html",
 			"settings":
 			{
-				"buffer_size": 2248,
+				"buffer_size": 2577,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "AasanAds/settings.py",
+			"settings":
+			{
+				"buffer_size": 3414,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "core/SMS_MESSAGES.py",
+			"settings":
+			{
+				"buffer_size": 467,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "core/templates/admin.html",
+			"settings":
+			{
+				"buffer_size": 569,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "core/models.py",
+			"settings":
+			{
+				"buffer_size": 8655,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "core/damadam_utils.py",
+			"settings":
+			{
+				"buffer_size": 541,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "core/forms.py",
+			"settings":
+			{
+				"buffer_size": 2288,
 				"line_ending": "Unix"
 			}
 		}
@@ -438,26 +510,35 @@
 	],
 	"file_history":
 	[
-		"/home/xerox/ClubInternet/ads/AasanAds/api_specification.txt",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/redis_utils.py",
+		"/home/xerox/ClubInternet/ads/AasanAds/core/models.py",
+		"/home/xerox/ClubInternet/ads/AasanAds/core/forms.py",
+		"/home/xerox/ClubInternet/ads/testing.py",
+		"/home/xerox/ClubInternet/ads/AasanAds/core/SMS_MESSAGES.py",
+		"/home/xerox/ClubInternet/ads/AasanAds/core/damadam_utils.py",
+		"/home/xerox/ClubInternet/ads/AasanAds/AasanAds/settings.py",
+		"/home/xerox/Downloads/pipe (1).py",
+		"/home/xerox/ClubInternet/ads/AasanAds/core/templates/SalesAgent.html",
+		"/home/xerox/ClubInternet/ads/AasanAds/core/admin.py",
+		"/home/xerox/ClubInternet/ads/AasanAds/core/templates/entrance.html",
+		"/home/xerox/ClubInternet/ads/AasanAds/AasanAds/wsgi.py",
+		"/home/xerox/ClubInternet/ads/AasanAds/core/sms_utils.py",
+		"/home/xerox/ClubInternet/ads/AasanAds/api_specification.txt",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/templates/admin.html",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/templates/abc.html",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/templates/base.html",
 		"/home/xerox/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
 		"/home/xerox/.config/sublime-text-3/Packages/Default/Default (Linux).sublime-keymap",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/api.py",
-		"/home/xerox/ClubInternet/ads/AasanAds/core/admin.py",
 		"/home/xerox/Downloads/base2.js",
 		"/home/xerox/Downloads/split.js",
 		"/home/xerox/ClubInternet/aasaninternet-webapp/asaan/settings.py",
 		"/home/xerox/ClubInternet/coffeedapp/core/models.py",
-		"/home/xerox/ClubInternet/ads/AasanAds/core/models.py",
 		"/home/xerox/ClubInternet/aasaninternet-webapp/core/urls.py",
 		"/home/xerox/ClubInternet/aasaninternet-webapp/core/views.py",
 		"/home/xerox/ClubInternet/coffeedapp/core/views.py",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/templates/form.html",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/views.py",
-		"/home/xerox/ClubInternet/ads/AasanAds/AasanAds/settings.py",
 		"/home/xerox/ClubInternet/ads/AasanAds/core/urls.py",
 		"/home/xerox/ClubInternet/ads/AasanAds/AasanAds/urls.py",
 		"/media/xerox/New Volume/ClubInternet/unconnectedredditpk/unconnectedreddit/templates/link_list.html",
@@ -556,16 +637,7 @@
 		"/tmp/fz3temp-1/getvideo.php",
 		"/home/xerox/ClubInternet/phptests (2)/getvideo.php",
 		"/home/xerox/ClubInternet/phptests (2)/lmno.tx",
-		"/home/xerox/admissions/abc.php",
-		"/home/xerox/summer-16/HTTP/Logger.java",
-		"/home/xerox/ClubInternet/phptests (2)/lmno.txt",
-		"/home/xerox/ClubInternet/video/html5.html",
-		"/home/xerox/summer-16/httpsServer/SimplehttpServer/README.md",
-		"/home/xerox/Downloads/HTTP/WebServer.java",
-		"/home/xerox/summer-16/HTTP/WebServer.java",
-		"/home/xerox/summer-16/HTTP/Serverthread.java",
-		"/home/xerox/summer-16/httpsServer/README.md",
-		"/home/xerox/summer-16/httpsServer/SimplehttpServer/Serverthread.java"
+		"/home/xerox/admissions/abc.php"
 	],
 	"find":
 	{
@@ -584,6 +656,32 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"send_sms",
+			"superuser",
+			"sms_ut",
+			"form_valid",
+			"dfds33232332kjj",
+			"Top",
+			"bulk",
+			"\\D\\d{5}\\D*",
+			"(\\[^0-9])*\\d{5}\\b",
+			"[^0-9]*\\b\\d{5}\\b",
+			"\\([^0-9]*)\\b\\d{5}\\b",
+			"([^0-9]*)\\b\\d{5}\\b",
+			"base",
+			"locationcounter",
+			"topup",
+			"to",
+			"set()",
+			"set",
+			"data",
+			"pk",
+			"ad_id",
+			"id",
+			"free",
+			"auth =",
+			"auth",
+			"location",
 			"charfi",
 			"agent",
 			"json.",
@@ -685,38 +783,12 @@
 			"src",
 			" src",
 			"src",
-			"copy_page(",
-			"memcpy",
-			"total_pages",
-			"INIT_PAGE_LIST_HEAD",
-			"domain",
-			"shadow_domain",
-			"total",
-			"GUEST_PTE_SIZE",
-			"size",
-			"xen_add_to_physmap",
-			"number of pages",
-			"Number of pages",
-			"pages",
-			"copy page",
-			"__put_user_asm",
-			"__put_user_size",
-			"copy_to_user",
-			"copy_from_user",
-			"pagefault",
-			"disk",
-			"paging_get_hostmode",
-			"page_fault",
-			"trap_init",
-			"trap_init()",
-			"trap_init();",
-			"TRAP_page_faul",
-			"TRAP_page_fault"
+			"copy_page("
 		],
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": false,
+		"regex": true,
 		"replace_history":
 		[
 		],
@@ -729,54 +801,24 @@
 	"groups":
 	[
 		{
-			"selected": 7,
+			"selected": 2,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "AasanAds/settings.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3383,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								884,
-								884
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1653.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
 					"file": "core/urls.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1090,
+						"buffer_size": 1157,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1062,
-								1062
+								970,
+								970
 							]
 						],
 						"settings":
@@ -788,53 +830,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "core/models.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6073,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5813,
-								5813
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 3135.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
+					"buffer": 1,
 					"file": "core/api.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4043,
+						"buffer_size": 4646,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3594,
-								3594
+								4354,
+								4354
 							]
 						],
 						"settings":
@@ -845,27 +858,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 884.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 2,
 					"file": "core/views.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6412,
+						"buffer_size": 8411,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6326,
-								6326
+								5808,
+								5808
 							]
 						],
 						"settings":
@@ -874,131 +887,117 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2204.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "core/damadam_utils.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 436,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								243,
-								243
-							]
-						],
-						"settings":
-						{
-							"auto_name": "damadam_utils.py",
-							"syntax": "Packages/Python/Python.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "core/redis_utils.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2316,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2288,
-								2288
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1425.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "core/sms_utils.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 246,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								244,
-								244
-							]
-						],
-						"settings":
-						{
-							"auto_name": "sms_utils",
-							"syntax": "Packages/Python/Python.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2205.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
-					"file": "core/forms.py",
+					"buffer": 3,
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1654,
+						"buffer_size": 1614,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										206,
+										214
+									],
+									[
+										310,
+										318
+									],
+									[
+										540,
+										548
+									],
+									[
+										682,
+										690
+									],
+									[
+										773,
+										781
+									],
+									[
+										1037,
+										1045
+									],
+									[
+										1368,
+										1376
+									],
+									[
+										1449,
+										1457
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								1402,
+								1402
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 495.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "core/sms_utils.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3560,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								58,
-								58
+								723,
+								723
 							]
 						],
 						"settings":
 						{
-							"auto_name": "forms.py",
 							"syntax": "Packages/Python/Python.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 0.0,
+						"translation.x": 424.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 5,
 					"file": "/home/xerox/Downloads/pipe.py",
 					"semi_transient": false,
 					"settings":
@@ -1010,8 +1009,8 @@
 						"selection":
 						[
 							[
-								1014,
-								1014
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1023,24 +1022,173 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
-					"file": "core/admin.py",
+					"buffer": 6,
+					"file": "core/templates/SalesAgent.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 246,
+						"buffer_size": 2577,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								215,
-								215
+								606,
+								606
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 540.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "AasanAds/settings.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3414,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1154,
+								1154
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1485.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 8,
+					"file": "core/SMS_MESSAGES.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 467,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								232,
+								232
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "core/templates/admin.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 569,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								195,
+								195
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "core/models.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8655,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7240,
+								7240
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3148.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "core/damadam_utils.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 541,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5,
+								5
 							]
 						],
 						"settings":
@@ -1055,60 +1203,32 @@
 					"type": "text"
 				},
 				{
-					"buffer": 11,
-					"file": "core/templates/entrance.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 432,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								432,
-								432
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
 					"buffer": 12,
-					"file": "core/templates/SalesAgent.html",
+					"file": "core/forms.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2248,
+						"buffer_size": 2288,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								594,
-								594
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"syntax": "Packages/Python/Python.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 11,
 					"type": "text"
 				}
 			]
@@ -1116,7 +1236,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 25.0
+		"height": 23.0
 	},
 	"input":
 	{
@@ -1131,11 +1251,18 @@
 				0,
 				1,
 				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
 			]
 		],
 		"cols":
 		[
 			0.0,
+			0.475041937001,
 			1.0
 		],
 		"rows":
@@ -1165,7 +1292,7 @@
 	"project": "AasanAds.sublime-project",
 	"replace":
 	{
-		"height": 46.0
+		"height": 42.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1185,19 +1312,19 @@
 		[
 			[
 				"",
-				"~/summer-16/sublime-plugin/custom_plugin.sublime-project"
+				"~/ClubInternet/aasan.sublime-project"
 			]
 		],
 		"width": 380.0
 	},
 	"select_symbol":
 	{
-		"height": 0.0,
+		"height": 380.0,
 		"last_filter": "",
 		"selected_items":
 		[
 		],
-		"width": 0.0
+		"width": 380.0
 	},
 	"selected_group": 0,
 	"settings":
@@ -1207,7 +1334,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 146.0,
+	"side_bar_width": 222.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

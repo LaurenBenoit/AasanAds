@@ -6,11 +6,20 @@ import urllib
 import SMS_MESSAGES
 import re
 SMS_URL= 'http://shahz.pagekite.me/sendsms'
-def send_sms(to, message):
-	# to phone number must be in URI. for some reason unirest does not decode it!
-	unirest.get(SMS_URL, params = {'phone':urllib.pathname2url(to), 'text':message}, callback = functools.partial(callback, to, message))
+def resend_sms(sms):
+	unirest.get(SMS_URL, params = {'phone':urllib.pathname2url(sms.reciever), 'text':sms.message}, callback = functools.partial(callback_resend, sms))
 
-def callback(to, message, response):
+def callback_resend(sms, response):
+	print response.body
+	if 'SENT!' in response.body:
+		sms.status = 1
+	sms.save()
+
+def send_sms(to, message, ad):
+	# to phone number must be in URI. for some reason unirest does not decode it!
+	unirest.get(SMS_URL, params = {'phone':urllib.pathname2url(to), 'text':message}, callback = functools.partial(callback, to, message, ad))
+
+def callback(to, message,ad, response):
 	print 'response'
 	print response.body
 	print 'to'
@@ -20,12 +29,12 @@ def callback(to, message, response):
 	status = 0
 	if 'SENT!' in response.body:
 		status = 1
-	sms = SMSOutgoing(reciever=to, message=message,status = status, topup=None, type= 11)
+	sms = SMSOutgoing(reciever=to, message=message,status = status, topup=None, type= 11, ad =ad)
 	sms.save()
 
-def parse_sms(sender, message):
-	# if sender == '3737': # most import if condition to verify.
-	if 1 == 1: # remove this line when upar wali condition activated.
+def parse_sms(sender, message, smsincoming):
+	if sender == '+923404902633': # most import if condition to verify.
+	# if 1 == 1: # remove this line when upar wali condition activated.
 		message = message.lower()
 		print message
 		if 'easypaisa' in message: # this is actually a easypaisa msg
@@ -54,7 +63,8 @@ def parse_sms(sender, message):
 				print name
 				print 'number'
 				print number
-			elif 'account' in message and 'cnic' not in message: 
+			elif 'account' in message and 'cnic' not in message:
+				print 'dsds'
 				# CNIC TO WALLET
 				pass
 			elif 'account' not in message and 'cnic' in message:
@@ -72,28 +82,37 @@ def parse_sms(sender, message):
 				# LOOKUP CNIC TO topup.cnic
 				n = Transaction.objects.filter(cnic=cnic, status=0).count()
 				if n == 1:
-					trc= Transaction.objects.filter(cnic=cnic, status=0)
+					trc= Transaction.objects.get(cnic=cnic, status=0)
 					trc.money = money
 					trc.trx_id = trx_id
+					trc.sms = smsincoming
 					if trc.money >= trc.topup.money_paid:
 						trc.status = 1
 						if trc.money > trc.topup.money_paid:
 							trc.status = 4
 						trc.save()
-						send_sms(trc.phone_number, SMS_MESSAGES.khoofia)
+						send_sms(trc.phone_number, SMS_MESSAGES.ask_secret_code_advertiser, trc.topup.ad)
+						send_sms(trc.topup.closed_by.phone_number, SMS_MESSAGES.ask_secret_code_agent, trc.topup.ad)
 
 					elif trc.money < trc.topup.money_paid: 
 						trc.status = 3
 
 				else:
+					print 'mismatched payment'
+					Transaction(money=money, trx_id=trx_id,cnic=cnic,sms=smsincoming).save()
 					#  MAKE MISMATCHED PAYMENT here.
 					pass
+			else:
+				print 'some thing happened'
 	elif sender != '3737' and 2 != 2:
 		khoofia = re.search('(\[^0-9])*\d{5}(\[^0-9])*',message,re.DEBUG)
 		n = Transaction.objects.filter(phone_number= sender, status=1).count()
 		if n == 1 and khoofia is not None:
-			trc= Transaction.objects.filter(phone_number= sender, status=1)
+			trc= Transaction.objects.get(phone_number= sender, status=1)
 			trc.secret_code = khoofia
+			print 'khoofia'
+			print trc.secret_code
+			trc.status = 2
 			trc.save()
 			trc.topup.make_it_live()
 		else:

@@ -1,0 +1,16 @@
+{% for ad in object_list %}
+	<h1>AD</h1>>
+	{{ad.title}}
+	{{ad.description}}
+	{{ad.phone_number}}
+	<br>
+	<h4>Topups:</h4>
+	{% for topup in ad.topup_set.all %}
+	
+	status:{{topup.get_status_display}}
+	money:{{topup.money_paid}}
+	clicks: {{topup.clicks}}
+	{{topup.phone_number}}
+	<br>
+	{%endfor%}
+{% endfor %}
