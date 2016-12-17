@@ -182,7 +182,7 @@ def resumeTopupAd(request, pk=None, *args, **kwargs):
 	topup = coremodels.Topup.objects.get(id=pk)
 	topup.resumeReq()
 	return redirect('super_user')
-def suspendTopupAd(request, pk=None, *args, **kwargs):
+def deleteTopupAd(request, pk=None, *args, **kwargs):
 	topup = coremodels.Topup.objects.get(id=pk)
 	topup.deleteReq()
 	return redirect('super_user')
