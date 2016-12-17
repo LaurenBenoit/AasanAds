@@ -12,15 +12,17 @@
 	clicks: {{topup.clicks}}
 	{{topup.phone_number}}
 	{{topup.id}}
+	{{ if topup.status != 4 }}
 	<a href="/superuser/topup/suspend/{{topup.id}}"> suspend </a> 
-
+	{{ endif }}
 	<a href="/superuser/topup/delete/{{topup.id}}">
 	delete
 	</a>
-
+	{{ if topup.status == 4 }}
 	<a href="/superuser/topup/resume/{{topup.id}}">
 	resume
 	</a>
+	{{endif}}
 	<br>
 	{%endfor%}
 {% endfor %}
