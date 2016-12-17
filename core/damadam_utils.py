@@ -7,17 +7,17 @@ import unirest
 
 def deleteTopup(tid, callback):
 	data = {}
-	data['tid'] = topup.id
+	data['tid'] = topup
 	data = json.dumps(data)
 	unirest.post(damadam_url + "/api/ad/delete/", headers={ "Content-type": "application/json" },params=data,  auth=(damadam_user, damadam_pass), callback=callback)
 def resumeTopup(tid, callback):
 	data = {}
-	data['tid'] = topup.id
+	data['tid'] = topup
 	data = json.dumps(data)
 	unirest.post(damadam_url + "/api/ad/resume/", headers={ "Content-type": "application/json" },params=data,  auth=(damadam_user, damadam_pass), callback=callback)
 def suspendTopup(topup, callback):
 	data = {}
-	data['tid'] = topup.id
+	data['tid'] = topup
 	data = json.dumps(data)
 	unirest.post(damadam_url + "/api/ad/suspend/", headers={ "Content-type": "application/json" },params=data,  auth=(damadam_user, damadam_pass), callback=callback)
 
