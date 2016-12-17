@@ -43,7 +43,10 @@ ad_id:{{tr.topup.ad.id}}
 <h3> All pending payments
 </h3>
 {%  for pp in pending_payment %}
-{{pp.topup}}
+{{pp.topup.id}}
+{{pp.cnic}}
+{{pp.phone_number}}
+{{pp.money}}
 
 <br><br>
 {% endfor %}
