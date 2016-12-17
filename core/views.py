@@ -48,6 +48,14 @@ def adDelete(request, pk=None, *args, **kwargs):
 		Ad.objects.get(id=pk).delete()
 	return redirect('sales_agent')
 
+def adSunset(request, pk=None, *args, **kwargs):
+	if request.user.get_SalesAgent() is not None:
+		ad = Ad.objects.get(id=pk)
+		ad.status = 8
+		ad.save()
+	return redirect('sales_agent')
+
+
 def adClaim(request, pk=None, *args, **kwargs):
 	agent = request.user.get_SalesAgent()
 	if agent is not None:
@@ -79,6 +87,7 @@ class Dashboard(View):
 			agent = request.user.get_SalesAgent()
 			my_claimed_ads = Ad.objects.filter(status=3, claimed_by=agent).all()
 			my_closed_topup = Topup.objects.filter(status=0, closed_by=agent).all()
+			my_stopped_ads = Ad.objects.filter(status=7, claimed_by=agent).all()
 			# for ad in uapproved_ads:
 			# 	pass
 			can_claim = False
@@ -92,7 +101,8 @@ class Dashboard(View):
 					can_claim = True
 			data = {'unapproved_ads':unapproved_ads,'approved_ads':approved_ads,
 					'paused_ads':paused_ads,'timediff': timediff, 'can_claim': can_claim, 
-					'my_claimed_ads':my_claimed_ads, 'my_closed_topup':my_closed_topup}
+					'my_claimed_ads':my_claimed_ads, 'my_closed_topup':my_closed_topup,
+					'my_stopped_ads': my_stopped_ads}
 
 			return render_to_response('SalesAgent.html', data)
 		elif request.user.is_superuser:

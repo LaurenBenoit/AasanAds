@@ -136,11 +136,13 @@ def process_sendSMS(request):
 	tid = data['tid']
 	topup = Topup.objects.get(id=tid)
 	if 'sms' in data:
-		clicks_done = topup.clicks * (data[sms]/100.0)
+		clicks_done = topup.clicks * (int(data['sms'])/100.0)
 		clicks_rem = topup.clicks-clicks_done
-		sms_utils.send_sms(topup.phone_number, SMS_MESSAGES.ad_progress.format(clicks_done, clicks_rem), topup.ad)
+		sms_utils.send_sms(topup.phone_number, SMS_MESSAGES.ad_progress % (clicks_done, clicks_rem), topup.ad)
 	elif 'sms_url' in data:
 		sms_utils.send_sms(topup.phone_number, SMS_MESSAGES.ad_approved.format(data['sms_url']),topup.ad)
+
+	return HttpResponse('OKAY')
 
 
 @csrf_exempt

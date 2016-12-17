@@ -22,7 +22,7 @@ AD_STATUS = (
 	(5, 'Running'),			# Running.
 	(6, 'Suspended'),		# Not Running
 	(7, 'Stopped'),			# Not Running
-	(8, 'Expired')
+	(8, 'SUNSET')
 )
 
 LOCATION = (
@@ -158,6 +158,7 @@ class Topup(models.Model):
 	def resumeCall(self, response):
 		print response
 	def suspendCall(self, response):
+		print 'hello what awehawhjds'
 		print response
 	def resumeCall(self, response):
 		print response
@@ -167,8 +168,8 @@ class Topup(models.Model):
 			damadam_utils.resumeTopup(self.id, self.resumeCall)	
 
 		# import functools
-	def suspendReq(self):
-		if ad.app_code == 1:
+	def suspend(self):
+		if self.ad.app_code == 1:
 			import damadam_utils
 			damadam_utils.suspendTopup(self.id, self.suspendCall)
 		# import functools
@@ -197,7 +198,7 @@ class Topup(models.Model):
 		if self.ad.app_code == 1:
 			import damadam_utils
 			damadam_utils.sendAd(self.ad,self.clicks, self.id)
-
+		self.ad.save()
 class Locations(models.Model):
 	class Meta:
 		unique_together = (('ad', 'location'),)

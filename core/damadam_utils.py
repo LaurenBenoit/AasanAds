@@ -1,5 +1,5 @@
 import core.models as coremodels
-damadam_url = 'http://10.50.202.168:8000'
+damadam_url = 'http://apollo7788.pagekite.me'
 damadam_user = 'aasanads'
 damadam_pass = 'damadam1234'
 import json
@@ -8,14 +8,17 @@ import unirest
 def deleteTopup(tid, callback):
 	data = {}
 	data['tid'] = tid
+	data = json.dumps(data)
 	unirest.post(damadam_url + "/api/ad/delete/", headers={ "Content-type": "application/json" },params=data,  auth=(damadam_user, damadam_pass), callback=callback)
 def resumeTopup(tid, callback):
 	data = {}
 	data['tid'] = tid
+	data = json.dumps(data)
 	unirest.post(damadam_url + "/api/ad/resume/", headers={ "Content-type": "application/json" },params=data,  auth=(damadam_user, damadam_pass), callback=callback)
-def suspendTopup(tid, callback):
+def suspendTopup(topup, callback):
 	data = {}
 	data['tid'] = tid
+	data = json.dumps(data)
 	unirest.post(damadam_url + "/api/ad/suspend/", headers={ "Content-type": "application/json" },params=data,  auth=(damadam_user, damadam_pass), callback=callback)
 
 

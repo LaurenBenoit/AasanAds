@@ -125,6 +125,14 @@ My Closed Topup(Awaiting payment)
 	<a href='/topup/khoofia/{{topup.id}}'>put khoofia</a>
 {% endfor %}
 
+<h3> Paid Stopped
+</h3>
+
+{% for ad in my_stopped_ads %}
+	{{ad.title}}
+
+		<a href="/ad/close/{{ad.id}}"><button > Close! </button> </a> <a href="/ad/sunset/{{ad.id}}"><button > Sunset! </button> </a> 
+{% endfor %}
 
 <a href='logout'> Logout </a>
 </body>
