@@ -155,14 +155,24 @@ class Topup(models.Model):
 	phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+923334404403'.")
 	phone_number = models.CharField(validators=[phone_regex], max_length=20) # validators should be a list
 	
-	def resumeCall(self, response):
-		print response
+	def deleteCall(self, response):
+		print 'deleted'
+		self.delete()
 	def suspendCall(self, response):
-		print 'hello what awehawhjds'
+		print 'suspend'
+		self.status = 4
 		print response
 	def resumeCall(self, response):
+		print 'resummedd'
+		if self.status == 4:
+			if money_paid != 0:
+				self.status = 1
+			else:
+				self.status = 2
 		print response
 	def resumeReq(self):
+
+		# TODO
 		if ad.app_code == 1:
 			import damadam_utils
 			damadam_utils.resumeTopup(self.id, self.resumeCall)	
