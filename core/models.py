@@ -173,7 +173,7 @@ class Topup(models.Model):
 	def resumeReq(self):
 
 		# TODO
-		if ad.app_code == 1:
+		if self.ad.app_code == 1:
 			import damadam_utils
 			damadam_utils.resumeTopup(self.id, self.resumeCall)	
 
@@ -184,7 +184,7 @@ class Topup(models.Model):
 			damadam_utils.suspendTopup(self.id, self.suspendCall)
 		# import functools
 	def deleteReq(self):
-		if ad.app_code == 1:
+		if self.ad.app_code == 1:
 			import damadam_utils
 			damadam_utils.deleteTopup(self.id, self.deleteCall)
 
