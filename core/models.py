@@ -166,7 +166,7 @@ class Topup(models.Model):
 	def resumeCall(self, response):
 		print 'resummedd'
 		if self.status == 4:
-			if money_paid != 0:
+			if self.money_paid != 0:
 				self.status = 1
 			else:
 				self.status = 2
