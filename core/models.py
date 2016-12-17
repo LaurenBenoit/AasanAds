@@ -161,6 +161,7 @@ class Topup(models.Model):
 	def suspendCall(self, response):
 		print 'suspend'
 		self.status = 4
+		self.save()
 		print response
 	def resumeCall(self, response):
 		print 'resummedd'
@@ -169,6 +170,7 @@ class Topup(models.Model):
 				self.status = 1
 			else:
 				self.status = 2
+			self.save()
 		print response
 	def resumeReq(self):
 
