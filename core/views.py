@@ -87,6 +87,8 @@ class Dashboard(View):
 			agent = request.user.get_SalesAgent()
 			my_claimed_ads = Ad.objects.filter(status=3, claimed_by=agent).all()
 			my_closed_topup = Topup.objects.filter(status=0, closed_by=agent).all()
+			unverified_topup = Topup.objects.filter(status=5, closed_by=agent).all()
+			verified_topup = Topup.objects.filter(status=1, closed_by=agent).all()
 			my_stopped_ads = Ad.objects.filter(status=7, claimed_by=agent).all()
 			# for ad in uapproved_ads:
 			# 	pass
@@ -187,6 +189,11 @@ def deleteTopupAd(request, pk=None, *args, **kwargs):
 	topup.deleteReq()
 	return redirect('super_user')
 
+def verifyTopupAd(request, pk=None, *args, **kwargs):
+	topup = coremodels.Topup.objects.get(id=pk)
+	topup.status = 1
+	topup.save()
+	return redirect('sales_agent')
 
 class AllAds(ListView):
 	model = coremodels.Ad

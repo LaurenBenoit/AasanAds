@@ -15,7 +15,11 @@ urlpatterns = [
 
 	url(r'^superuser/topup/suspend/(?P<pk>\d+)$', login_required(coreviews.suspendTopupAd)),
 	url(r'^superuser/topup/resume/(?P<pk>\d+)$', login_required(coreviews.resumeTopupAd)),
-		url(r'^superuser/topup/delete/(?P<pk>\d+)$', login_required(coreviews.deleteTopupAd)),
+	url(r'^superuser/topup/delete/(?P<pk>\d+)$', login_required(coreviews.deleteTopupAd)),
+	url(r'^superuser/topup/verify/(?P<pk>\d+)$', login_required(coreviews.verifyTopupAd)),
+
+	url(r'^topup/verify/(?P<pk>\d+)$', login_required(coreviews.verifyTopupAd)),
+	
 	url(r'^$', coreviews.Hello),
 	url(r'^ad/create/$', coreviews.AdCreateView.as_view()),
 	url(r'^ad/delete/(?P<pk>\d+)$', coreviews.adDelete),

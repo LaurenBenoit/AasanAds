@@ -125,6 +125,21 @@ My Closed Topup(Awaiting payment)
 	<a href='/topup/khoofia/{{topup.id}}'>put khoofia</a>
 {% endfor %}
 
+<h3>
+Paid Topups
+</h3>
+
+{% for topup in unverified_topup %}
+	{{topup.ad.title}} {{topup.phone_number}} {{topup.cnic}} Money:{{topup.money_paid}} Clicks:{{topup.clicks}}
+	<a href='/topup/khoofia/{{topup.id}}'>put khoofia</a>
+	<a href='/topup/verify/{{topup.id}}'>verify</a>
+{% endfor %}
+
+{% for topup in verified_topup %}
+	{{topup.ad.title}} {{topup.phone_number}} {{topup.cnic}} Money:{{topup.money_paid}} Clicks:{{topup.clicks}}
+{% endfor %}
+
+
 <h3> Paid Stopped
 </h3>
 
