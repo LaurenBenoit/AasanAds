@@ -18,7 +18,9 @@
 	<a href="/superuser/topup/delete/{{topup.id}}">
 	delete
 	</a>
+	{% if topup.status == 5 %}
 	<a href="/superuser/topup/verify/{{topup.id}}"> VERIFY </a>
+	{%endif%}
 	{% if topup.status == 4 %}
 	<a href="/superuser/topup/resume/{{topup.id}}">
 	resume
