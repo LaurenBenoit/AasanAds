@@ -100,7 +100,7 @@ def parse_sms(sender, message, smsincoming):
 
 				else:
 					print 'mismatched payment'
-					Transaction(money=money, trx_id=trx_id,cnic=cnic,sms=smsincoming).save()
+					Transaction(money=money, trx_id=trx_id,cnic=cnic,sms=smsincoming, status= 5).save()
 					#  MAKE MISMATCHED PAYMENT here.
 					pass
 			else:
