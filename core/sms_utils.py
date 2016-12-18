@@ -118,9 +118,11 @@ def parse_sms(sender, message, smsincoming):
 			print trc.secret_code
 			trc.status = 2
 			trc.save()
+			trc.topup.status = 5
+			trc.topup.save()
 			trc.topup.make_it_live()
 		else:
-			print 'dsds'
+			print 'Someone random is sending us texts LOL'
 			# THIS IS A RANDOM NUMBER. SENDING US 
 			# TODO.
 			pass
