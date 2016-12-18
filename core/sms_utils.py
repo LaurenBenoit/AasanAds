@@ -107,8 +107,10 @@ def parse_sms(sender, message, smsincoming):
 				print 'some thing happened'
 	elif sender != '3737' and 2 == 2:
 		sender = '0'+sender[3:-1]
+		print sender
 		khoofia = re.search('(\[^0-9])*\d{5}(\[^0-9])*',message,re.DEBUG)
 		n = Transaction.objects.filter(phone_number= sender, status=1).count()
+		print n
 		if n == 1 and khoofia is not None:
 			trc= Transaction.objects.get(phone_number= sender, status=1)
 			trc.secret_code = khoofia
