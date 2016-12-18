@@ -139,7 +139,7 @@ TOPUP_STATUS = (
 	(2, 'free'), # THIS AD WAS an APPROVED AD AND ITS FREE.
 	(3, 'expired'),		# expired. :(
 	(4, 'suspended'),
-	(5, 'unverified payment')
+	(5, 'unverified payment'),
 )
 
 class Topup(models.Model):

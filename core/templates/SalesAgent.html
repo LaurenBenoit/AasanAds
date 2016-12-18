@@ -131,7 +131,6 @@ Paid Topups
 
 {% for topup in unverified_topup %}
 	{{topup.ad.title}} {{topup.phone_number}} {{topup.cnic}} Money:{{topup.money_paid}} Clicks:{{topup.clicks}}
-	<a href='/topup/khoofia/{{topup.id}}'>put khoofia</a>
 	<a href='/topup/verify/{{topup.id}}'>verify</a>
 {% endfor %}
 
