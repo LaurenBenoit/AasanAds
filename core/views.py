@@ -104,7 +104,9 @@ class Dashboard(View):
 			data = {'unapproved_ads':unapproved_ads,'approved_ads':approved_ads,
 					'paused_ads':paused_ads,'timediff': timediff, 'can_claim': can_claim, 
 					'my_claimed_ads':my_claimed_ads, 'my_closed_topup':my_closed_topup,
-					'my_stopped_ads': my_stopped_ads}
+					'my_stopped_ads': my_stopped_ads, 'unverified_topup':unverified_topup,
+					'verified_topup':verified_topup
+					}
 
 			return render_to_response('SalesAgent.html', data)
 		elif request.user.is_superuser:
